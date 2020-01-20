@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="Description" content="Личный блог Типотека">
+  <title>Типотека</title>
+  <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" crossorigin="anonymous">
+  <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" crossorigin="anonymous">
+  <link rel="preload" href="./fonts/SFProDisplay-Regular.woff2" as="font" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.min.css">
+</head>
+
+<body>
+  <div class="wrapper-color">
+    <header class="header">
+      <a class="header__logo logo" href="#">
+        <img class="logo__image" src="img/icons/logo-image-only.svg" alt="логотип Тайпотеки">
+        <span class="logo__name">Типотека</span>
+      </a>
+      <button class="button button--colored header__button-new">Новая запись</button>
+      <div class="header__dropdown">
+        <a href="#" class="button button--burger header__burger">Открыть меню</a>
+        <ul class="navigation header__navigation">
+          <li class="navigation__item"><a href="index.html">index.html --- все ссылки</a></li>
+          <li class="navigation__item"><a href="main.html">main.html --- Главная страница</a></li>
+          <li class="navigation__item"><a href="main-variation.html">main-variation.html --- Главная страница (варианты вида)</a></li>
+          <li class="navigation__item"><a href="main-no-news.html">main-no-news.html --- Страница без новостей и комментов</a></li>
+          <li class="navigation__item"><a href="admin-my-publications-2.html">admin-my-publications-2.html --- Мои записи</a></li>
+          <li class="navigation__item"><a href="admin-categories.html">admin-categories.html --- Категории</a></li>
+          <li class="navigation__item"><a href="admin-my-publications-1.html">admin-my-publications-1.html --- Комментарии</a></li>
+          <li class="navigation__item"><a href="new-post-photo.html">new-post-photo.html --- Страница для нового поста</a></li>
+          <li class="navigation__item"><a href="new-post-photo-1.html">new-post-photo-1.html --- Страница добавления нового поста</a></li>
+          <li class="navigation__item"><a href="new-post-photo-2.html">new-post-photo-2.html --- Страница добавления нового поста (выбор даты)</a></li>
+          <li class="navigation__item"><a href="new-post-photo-3.html">new-post-photo-3.html --- Страница добавления нового поста (заполненная)</a>
+          </li>
+          <li class="navigation__item"><a href="main-empty.html">main-empty.html --- Главная страница пустая</a></li>
+          <li class="navigation__item"><a href="registration.html">registration.html --- Регистрация</a></li>
+          <li class="navigation__item"><a href="sign-in-error-1.html">sign-in-error-1.html.html --- Регистрация c ошибками</a></li>
+          <li class="navigation__item"><a href="sign-in-error-2.html">sign-in-error-2.html--- Регистрация c
+              ошибкой поля email</a></li>
+          <li class="navigation__item"><a href="sign-in-error-3.html">sign-in-error-3.html--- Регистрация c
+              ошибкой поля пароль</a></li>
+          <li class="navigation__item"><a href="publications-by-category.html">publications-by-category.html --- Список публикаций в категории</a></li>
+          <li class="navigation__item"><a href="404.html">404.html --- Страница для отображения ошибок</a></li>
+          <li class="navigation__item"><a href="500.html">500.html --- Страница для отображения ошибок</a></li>
+          <li class="navigation__item"><a href="search.html">search.html --- Страница поиска</a></li>
+          <li class="navigation__item"><a href="search-2.html">search-2.html --- Страница поиска с результатами</a></li>
+          <li class="navigation__item"><a href="search-3.html">search-3.html --- Страница поиска пустая</a></li>
+          <li class="navigation__item"><a href="post-user.html">post-user.html --- Страница поcта (для пользователя)</a></li>
+          <li class="navigation__item"><a href="post-visitor-no-tags.html">post-visitor-no-tags.html --- Страница поcта (для посетителя) без тегов</a>
+          </li><li class="navigation__item"><a href="post-visitor-no-comments.html">post-visitor-no-comments.html --- Страница поcта (для посетителя) без
+              комментариев</a>
+          </li>
+          <li class="navigation__item"><a href="post-visitor-no-photo.html">post-visitor-no-photo.html --- Страница поcта (для посетителя) без
+              фотографии</a>
+          </li>
+          <li class="navigation__item"><a href="post-user-2.html">post-user-2.html --- Страница поcта (для пользователя) с
+              ошибкой отправки комментария</a>
+          </li>
+          <li class="navigation__item"><a href="uikit.html">uikit.html --- UI KIT</a></li>
+        </ul>
+      </div>
+      <a class="header__search button button--search" href="#" aria-label="поиск по сайту"></a>
+    </header>
+
+    <main>
+      <section class="search-page">
+        <div class="search-page__wrapper search-page__wrapper--empty">
+          <h1>Поиск</h1>
+          <div class="search search-page__form">
+            <form action="#" method="get">
+              <label>
+                <input type="text" placeholder="Что ищем?" value="Путешествия">
+              </label>
+              <button class="search__button button button--transparent" type="submit">Найти</button>
+            </form>
+          </div>
+          <p class="search-page__empty">Ничего не нашлось</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <a class="footer__copyright" href="#" aria-label="HTMLAcademy">
+        <img src="img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy">
+      </a>
+      <span>•</span>
+      <p>Типотека, 2019</p>
+    </footer>
+  </div>
+
+</body>
+
+</html>
