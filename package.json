@@ -1,0 +1,25 @@
+{
+  "name": "309949-typoteka-3",
+  "version": "1.0.0",
+  "description": "«Типотека»",
+  "main": "./src/service/service.js",
+  "scripts": {
+    "start": "node ./src/service/service.js",
+    "test": "npm run eslint",
+    "eslint": "eslint --ext .js src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jean-1314/309949-typoteka-3.git"
+  },
+  "author": "Ivan Savitsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jean-1314/309949-typoteka-3/issues"
+  },
+  "homepage": "https://github.com/jean-1314/309949-typoteka-3#readme",
+  "devDependencies": {
+    "eslint": "6.8.0",
+    "eslint-config-htmlacademy": "0.5.2"
+  }
+}
