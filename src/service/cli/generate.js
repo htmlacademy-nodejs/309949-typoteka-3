@@ -1,6 +1,7 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;;
+const chalk = require(`chalk`);
 
 const {
   getRandomInt,
@@ -40,21 +41,21 @@ const generatePosts = (count) => (
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
-    const countPosts = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const content = JSON.stringify(generatePosts(countPosts));
     if (count > 1000) {
-      console.error(`Count exceeded 1000 items. Process exited with exit code ${ExitCode.failure}`);
+      console.error(chalk.red(`Count exceeded 1000 items. Process exited with exit code ${ExitCode.failure}`));
       process.exit(ExitCode.failure);
     } else {
-      fs.writeFile(FILE_NAME, content, (err) => {
-        if (err) {
-          console.error(`Cannot write data to file... Process exited with exit code ${ExitCode.failure}`);
-          process.exit(ExitCode.failure);
-        }
-        return console.info(`Operation successful. File created.`);
-      });
+      try {
+        const countPosts = Number.parseInt(count, 10) || DEFAULT_COUNT;
+        const content = JSON.stringify(generatePosts(countPosts));
+        await fs.writeFile(FILE_NAME, content);
+        console.info(chalk.green(`Operation successful. File created.`));
+      } catch (err) {
+        console.error(chalk.red(`Cannot write data to file... Process exited with exit code ${ExitCode.failure}`));
+        process.exit(ExitCode.failure);
+      }
     }
   }
 };
