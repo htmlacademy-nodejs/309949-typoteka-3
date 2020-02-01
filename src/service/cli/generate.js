@@ -12,14 +12,22 @@ const {
 const {
   DEFAULT_COUNT,
   FILE_NAME,
-  TITLES,
-  SENTENCES,
-  CATEGORIES,
+  FilePath,
 } = require(`../cli/constants`);
 
 const {
   ExitCode
 } = require(`../../constants`);
+
+const readContent = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, `utf8`);
+    return content.split(`\n`);
+  } catch (err) {
+    console.error(chalk.red(err));
+    return [];
+  }
+};
 
 const formatDate = (date) => {
   const year = date.getFullYear();
@@ -29,13 +37,13 @@ const formatDate = (date) => {
   return `${year}-${month.toString().length > 1 ? month : `0${month}`}-${day.toString().length > 1 ? day : `0${day}`} ${time}`
 };
 
-const generatePosts = (count) => (
+const generatePosts = (count, titles, categories, sentences) => (
   Array(count).fill({}).map(() => ({
-    title: TITLES[getRandomInt(0, TITLES.length - 1)],
-    announce: shuffle(SENTENCES).slice(0, getRandomInt(1, 5)).join(` `),
-    fullText: shuffle(SENTENCES).slice(0, getRandomInt(1, SENTENCES.length - 1)).join(` `),
+    title: titles[getRandomInt(0, titles.length - 1)],
+    announce: shuffle(sentences).slice(0, getRandomInt(1, 5)).join(` `),
+    fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
     createdDate: formatDate(getRandomDate(new Date(new Date().setMonth(new Date().getMonth() - 3)), new Date())),
-    category: Array.from(shuffle(CATEGORIES).slice(0, getRandomInt(1, CATEGORIES.length - 1))),
+    category: Array.from(shuffle(categories).slice(0, getRandomInt(1, categories.length - 1))),
   }))
 );
 
@@ -48,8 +56,11 @@ module.exports = {
       process.exit(ExitCode.failure);
     } else {
       try {
+        const sentences = await readContent(FilePath.sentences);
+        const titles = await readContent(FilePath.titles);
+        const categories = await readContent(FilePath.categories);
         const countPosts = Number.parseInt(count, 10) || DEFAULT_COUNT;
-        const content = JSON.stringify(generatePosts(countPosts));
+        const content = JSON.stringify(generatePosts(countPosts, titles, categories, sentences));
         await fs.writeFile(FILE_NAME, content);
         console.info(chalk.green(`Operation successful. File created.`));
       } catch (err) {
