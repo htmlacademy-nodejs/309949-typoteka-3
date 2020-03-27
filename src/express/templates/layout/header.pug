@@ -1,0 +1,33 @@
+header.header
+  a.header__logo.logo(href=`/`)
+    img.logo__image(src=`/img/icons/logo-image-only.svg` alt=`логотип Типотеки`)
+    span.logo__name Типотека
+  unless isLoggedIn
+    nav.header__nav
+      ul.header__nav-list
+        li.header__list-item
+          a.header__registration(href=`/register`) Регистрация
+        li.header__list-item
+          a.header__enter(href=`/login`) Вход с паролем
+  if isLoggedIn && !main
+    nav.header__nav
+      ul.header__nav-list
+        li.header__list-item
+          p Алёна Фролова
+        li.header__list-item
+          a.header__exit(href=`/`) Выйти
+    a.header__avatar.avatar
+      img(src=`/img/avatar-2.png` alt=`аватар пользователя`)
+  else if isLoggedIn && main
+    button.button.button--colored.header__button-new Новая запись
+    .header__dropdown
+      a.button.button--burger.header__burger(href=`#`) Открыть меню
+      ul.navigation.header__navigation
+        li.navigation__item
+          a(href=`/`) index.html --- все ссылки
+        li.navigation__item
+          a(href=`/`) main.html --- Главная страница
+        li.navigation__item
+          a(href=`/`) main-variation.html --- Главная страница (варианты вида)
+
+  a.header__search.button.button--search(href=`/search` aria-label=`поиск по сайту`)
