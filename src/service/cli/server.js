@@ -1,7 +1,7 @@
 'use strict';
 
+const express = require(`express`);
 const chalk = require(`chalk`);
-const http = require(`http`);
 const fs = require(`fs`).promises;
 
 const {
@@ -10,44 +10,22 @@ const {
   HttpCode
 } = require(`../cli/constants`);
 
-const sendResponse = (res, statusCode, message) => {
-  const template = `
-    <!Doctype html>
-      <html lang="ru">
-      <head>
-        <title>Typoteka</title>
-      </head>
-      <body>${message}</body>
-    </html>`.trim();
-
-  res.statusCode = statusCode;
-  res.writeHead(statusCode, {
-    'Content-Type': `text/html; charset=UTF-8`,
-  });
-
-  res.end(template);
-};
-
-const onClientConnect = async (req, res) => {
-  const notFoundMessageText = `Not found`;
-
-  switch (req.url) {
-    case `/`:
-      try {
-        const fileContent = await fs.readFile(FILE_NAME);
-        const mocks = JSON.parse(fileContent);
-        const message = mocks.map((post) => `<li>${post.title}</li>`).join(``);
-        sendResponse(res, HttpCode.OK, `<ul>${message}</ul>`);
-      } catch (err) {
-        sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
-      }
-
-      break;
-    default:
-      sendResponse(res, HttpCode.NOT_FOUND, notFoundMessageText);
-      break;
+const app = express();
+app.use(express.json());
+app.get(`/posts`, async (req, res) => {
+  try {
+    const fileContent = await fs.readFile(FILE_NAME);
+    const mocks = JSON.parse(fileContent);
+    res.json(mocks);
+  } catch (err) {
+    console.log(`We've got an error here, probably file is nonexistent or empty: ${err}`);
+    res.json([]);
   }
-};
+});
+
+app.use((req, res) => res
+  .status(HttpCode.NOT_FOUND)
+  .send(`Not found`));
 
 module.exports = {
   name: `--server`,
@@ -55,15 +33,7 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
     if (port > 0 && port <= 65535) {
-      http.createServer(onClientConnect)
-        .listen(port)
-        .on(`listening`, (err) => {
-          if (err) {
-            return console.error(chalk.red(`Error while creating server`, err));
-          }
-
-          return console.info(chalk.green(`Expecting connections to port ${port}`));
-        });
+      app.listen(DEFAULT_PORT, () => console.log(`Сервер запущен на порту: ${DEFAULT_PORT}`));
     } else {
       console.error(chalk.red(`Please enter port number between 1 and 65535`));
     }
