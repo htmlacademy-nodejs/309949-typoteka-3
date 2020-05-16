@@ -2,30 +2,17 @@
 
 const express = require(`express`);
 const chalk = require(`chalk`);
-const fs = require(`fs`).promises;
 
-const {
-  DEFAULT_PORT,
-  FILE_NAME,
-  HttpCode
-} = require(`../cli/constants`);
+const routes = require(`../api`);
+
+const {API_PREFIX, DEFAULT_PORT} = require(`../constants`);
 
 const app = express();
-app.use(express.json());
-app.get(`/posts`, async (req, res) => {
-  try {
-    const fileContent = await fs.readFile(FILE_NAME);
-    const mocks = JSON.parse(fileContent);
-    res.json(mocks);
-  } catch (err) {
-    console.log(`We've got an error here, probably file is nonexistent or empty: ${err}`);
-    res.json([]);
-  }
-});
 
-app.use((req, res) => res
-  .status(HttpCode.NOT_FOUND)
-  .send(`Not found`));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.use(API_PREFIX, routes);
 
 module.exports = {
   name: `--server`,
