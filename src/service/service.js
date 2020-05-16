@@ -5,7 +5,7 @@ const {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   ExitCode
-} = require(`../constants`);
+} = require(`./constants`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
 const [userCommand] = userArguments;
