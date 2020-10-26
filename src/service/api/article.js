@@ -5,12 +5,11 @@ const {HttpCode} = require(`../constants`);
 const keysValidator = require(`../middleware/keysValidator`);
 const articleExists = require(`../middleware/articleExists`);
 
-const route = new Router();
-
 const articleKeys = [`category`, `title`, `createdDate`, `announce`];
 const commentKeys = [`text`];
 
 module.exports = (app, articleService, commentService) => {
+  const route = new Router();
   app.use(`/articles`, route);
 
   // Articles
