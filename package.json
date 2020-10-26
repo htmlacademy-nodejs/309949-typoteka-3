@@ -4,7 +4,8 @@
   "description": "«Типотека»",
   "main": "./src/service/service.js",
   "scripts": {
-    "start": "node ./src/service/service.js",
+    "start": "cross-env LOG_LEVEL=error NODE_ENV=production node ./src/service/service.js --server 3000",
+    "start::debug": "cross-env LOG_LEVEL=debug NODE_ENV=development node ./src/service/service.js --server 3000",
     "server": "nodemon ./src/service/service.js --server 3000",
     "start-front-server": "nodemon ./src/express/index.js",
     "jest": "jest",
@@ -27,12 +28,15 @@
     "eslint-config-htmlacademy": "0.5.2",
     "jest": "26.6.1",
     "nodemon": "2.0.2",
+    "pino-pretty": "4.3.0",
     "supertest": "5.0.0"
   },
   "dependencies": {
     "chalk": "3.0.0",
+    "cross-env": "7.0.2",
     "express": "4.17.1",
     "nanoid": "3.1.7",
+    "pino": "6.7.0",
     "pug": "2.0.4"
   }
 }

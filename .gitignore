@@ -16,3 +16,4 @@ build/
 
 # Разное
 mocks.json
+service/logs
