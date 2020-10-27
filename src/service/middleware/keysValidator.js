@@ -3,8 +3,8 @@
 const {HttpCode} = require(`../constants`);
 
 module.exports = (bodyKeys) => (req, res, next) => {
-  const newOffer = req.body;
-  const keys = Object.keys(newOffer);
+  const newArticle = req.body;
+  const keys = Object.keys(newArticle);
   const keysExists = bodyKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {

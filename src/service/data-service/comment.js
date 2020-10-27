@@ -7,9 +7,9 @@ class CommentService {
 
   create(comment, article) {
     const {text} = comment;
-
-    article.comments = [...article.comments, {id: nanoid(MAX_ID_LENGTH), text}];
-    return article;
+    const newComment = {id: nanoid(MAX_ID_LENGTH), text};
+    article.comments = [...article.comments, newComment];
+    return newComment;
   }
 
   findAll(article) {

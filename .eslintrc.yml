@@ -6,3 +6,6 @@ env:
   node: true
 
 extends: 'htmlacademy/node'
+
+ignorePatterns:
+  '**/express/public/**/*.js'
