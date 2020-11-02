@@ -6,11 +6,11 @@ class CategoryService {
   }
 
   findAll() {
-    const categories = this._articles.reduce((acc, article) => {
-      acc.push(...article.category);
+    const categories = this._articles.reduce((acc, offer) => {
+      offer.category.forEach((category) => acc.add(category));
       return acc;
-    }, []);
-    return Array.from(new Set(categories));
+    }, new Set());
+    return [...categories];
   }
 }
 
