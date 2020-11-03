@@ -9,10 +9,11 @@ const searchRoutes = require(`./routes/search`);
 const articlesRoutes = require(`./routes/articles`);
 const categoriesRoutes = require(`./routes/categories`);
 const path = require(`path`);
-const {DEFAULT_PORT, PUBLIC_DIR} = require(`./constants`);
+const {DEFAULT_PORT, PUBLIC_DIR, UPLOAD_DIR} = require(`./constants`);
 
 const app = express();
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));
 
 app.set(`views`, path.resolve(__dirname, `templates/pages`));
 app.set(`view engine`, `pug`);

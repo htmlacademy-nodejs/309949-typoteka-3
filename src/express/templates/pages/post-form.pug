@@ -1,0 +1,47 @@
+extends ../layout/layout
+
+block content
+  section.modal.modal--flex
+    .popup.popup--new-publication.popup--flex
+      .new-publication
+        form(action=`/articles/add` method=`POST` enctype=`multipart/form-data` autocomplete=`off`)
+          .new-publication__header
+            h1= editMode ? `Редактировать публикацию` : `Новая публикация`
+            .new-publication__date-form
+              h3 Дата публикации
+              .new-publication__date-form-division
+                .new-publication__date-block
+                  label(for=`new-publication-date` aria-label=`Календарь`)
+                  input#new-publication-date(type=`text` name=`createdDate` placeholder=`21.03.2019` value=(article || {}).createdDate || new Date())
+            button.new-publication__button.button.button--colored(type=`submit`) Опубликовать
+          button.popup__button.button.button--popup-close(type=`button` aria-label=`Закрыть окно`)
+            | Закрыть
+            | окно
+          .new-publication__form.form
+            .form__wrapper.form__wrapper--intro
+              .form__field
+                label
+                  input(type=`text` placeholder=`Заголовок` required=`` name=`title` value=(article || {}).title)
+              .form__field.form__field--post-image
+                label
+                  input#image-name-field(type=`text` placeholder=`Фотография` readonly=``)
+                .form__image-loader.form__image-loader--publication
+                  label
+                    input.visually-hidden(type=`file` name=`image`)
+                    | Обзор
+              // TODO Костыль пока новый вариант верстки не подъедет
+              div(style=`padding: 20px 0;`)
+                if categories.length
+                  each category, index in categories
+                    .new-publication__checkbox
+                      input(type=`checkbox` name=`category[${index}]` id=`checkbox-${index}` value=category checked=((article || {}).category ? article.category.includes(category) : false))
+                      label(for=`checkbox-${index}`)= category
+                a.new-publication__form-link.button.button--transparent(href=`#`) Добавить категорию
+            .form__wrapper.form__wrapper--text
+              .form__field.form__field--publication-text
+                label
+                  textarea(rows=`${editMode ? 2 : 1}` name=`announce` placeholder=`Анонс публикации`)= (article || {}).announce
+              .form__field.form__field--publication-text
+                label
+                  textarea(rows=`${editMode ? 5 : 1}` name=`fullText` placeholder=`Полный текст публикации`)= (article || {}).fullText
+    .modal__overlay

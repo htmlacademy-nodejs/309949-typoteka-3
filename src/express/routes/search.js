@@ -1,13 +1,24 @@
 'use strict';
 
 const {Router} = require(`express`);
-const data = require(`../templates/data`);
+const api = require(`../api`).getAPI();
 
 const router = Router;
 const searchRouter = router();
 
-searchRouter.get(`/`, (req, res) => {
-  res.render(`search`, {...data, searchResult: [1]});
+searchRouter.get(`/`, async (req, res) => {
+  try {
+    const {query} = req.query;
+    const searchResults = await api.search(query);
+
+    res.render(`search`, {
+      searchResults
+    });
+  } catch (error) {
+    res.render(`search`, {
+      searchResults: []
+    });
+  }
 });
 
 module.exports = searchRouter;
