@@ -64,7 +64,7 @@ articlesRouter.post(`/add`, upload.single(`image`), async (req, res) => {
     const categories = await api.getCategories();
     res.render(`ticket-edit`, {
       ...data,
-      offer: articleData,
+      article: articleData,
       categories,
       editMode: true,
     });

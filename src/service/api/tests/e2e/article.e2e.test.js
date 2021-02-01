@@ -82,8 +82,6 @@ describe(`API refuses to create an article if data is invalid`, () => {
       title: `Тест тест`,
       description: `Тестирую тестовые данные 2`,
       picture: `test.jpg`,
-      type: `OFFER`,
-      sum: 1934
     };
     for (const key of Object.keys(newArticle)) {
       const badArticle = {...newArticle};
