@@ -18,3 +18,4 @@ build/
 mocks.json
 service/logs
 upload
+fill-db.sql
