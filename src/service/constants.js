@@ -10,15 +10,15 @@ module.exports.MAX_COMMENTS = 4;
 module.exports.API_PREFIX = `/api`;
 
 module.exports.ExitCode = {
-  success: 0,
-  failure: 1
+  SUCCESS: 0,
+  FAILURE: 1
 };
 
 module.exports.FilePath = {
-  sentences: `./data/sentences.txt`,
-  titles: `./data/titles.txt`,
-  categories: `./data/categories.txt`,
-  comments: `./data/comments.txt`,
+  SENTENCES: `./data/sentences.txt`,
+  TITLES: `./data/titles.txt`,
+  CATEGORIES: `./data/categories.txt`,
+  COMMENTS: `./data/comments.txt`,
 };
 
 module.exports.HttpCode = {
