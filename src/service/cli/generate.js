@@ -7,7 +7,8 @@ const {nanoid} = require(`nanoid`);
 const {
   getRandomInt,
   shuffle,
-  getRandomDate
+  getRandomDate,
+  readContent
 } = require(`../../utils`);
 
 const {
@@ -18,16 +19,6 @@ const {
   ExitCode,
   FilePath,
 } = require(`../constants`);
-
-const readContent = async (filePath) => {
-  try {
-    const content = await fs.readFile(filePath, `utf8`);
-    return content.split(`\n`);
-  } catch (err) {
-    console.error(chalk.red(err));
-    return [];
-  }
-};
 
 const formatDate = (date) => {
   const year = date.getFullYear();
@@ -67,11 +58,11 @@ module.exports = {
       process.exit(ExitCode.failure);
     } else {
       try {
-        const sentences = await readContent(FilePath.sentences);
-        const titles = await readContent(FilePath.titles);
-        const categories = await readContent(FilePath.categories);
+        const sentences = await readContent(fs, chalk, FilePath.SENTENCES);
+        const titles = await readContent(fs, chalk, FilePath.TITLES);
+        const categories = await readContent(fs, chalk, FilePath.CATEGORIES);
         const countPosts = Number.parseInt(count, 10) || DEFAULT_COUNT;
-        const comments = await readContent(FilePath.comments);
+        const comments = await readContent(fs, chalk, FilePath.COMMENTS);
         const content = JSON.stringify(generatePosts(countPosts, titles, categories, sentences, comments));
         await fs.writeFile(FILE_NAME, content);
         console.info(chalk.green(`Operation successful. File created.`));
