@@ -19,3 +19,6 @@ mocks.json
 service/logs
 upload
 fill-db.sql
+
+# Env
+.env
