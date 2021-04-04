@@ -39,29 +39,15 @@
         <div class="popup popup--registration popup--anti">
           <a class="popup__button button button--popup-close" aria-label="Закрыть окно">Закрыть
             окно</a>
-          <h2 class="popup__title">Регистрация</h2>
-          <div class="popup__form popup__form--active form form--register">
+          <h2 class="popup__title">Войти</h2>
+          <div class="popup__form form form--log-in">
             <form action="#" method="get">
               <div class="form__field"><label><input type="email" name="email" placeholder="Электронная почта" required=""></label>
               </div>
-              <div class="form__field"><label><input type="text" name="name" placeholder="Имя" required=""></label></div>
-              <div class="form__field"><label><input type="text" name="surname" placeholder="Фамилия"></label></div>
+
               <div class="form__field"><label><input type="password" name="password" placeholder="Пароль" required=""></label></div>
-              <div class="form__field"><label><input type="password" name="repeat-password" placeholder="Повтор пароля" required=""></label></div>
-              <div class="form__validation-error">
-                <p class="form__error-message">При регистрации произошли ошибки:</p>
-                <ul class="form__errors">
-                  <li class="form__error">Пароль не может состоять из двух букв</li>
-                  <li class="form__error">Фамилия не должна быть смешной</li>
-                </ul>
-              </div>
-              <div class="form__image-loader">
-                <a class="form__avatar avatar">
-                  <img src="img/icons/smile.svg" alt="аватар пользователя">
-                </a>
-                <label><input type="file" name="upload" class="visually-hidden">Загрузить фото профиля</label>
-              </div>
-              <button class="form__submit-btn form__submit-btn--register button button--colored" type="submit">Зарегистрироваться</button>
+              <p class="form__error-message">Некоторая ошибка произошла, беда!</p>
+              <button class="form__submit-btn form__submit-btn--log-in button button--colored" type="submit">Войти</button>
             </form>
           </div>
         </div>

@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 'use strict';
 
 // логика выбора даты в календаре
@@ -55,13 +56,13 @@ if (popup) {
 
 // меняет высоту поля textarea в блоке comments в зависимости от количества введенных в него строк.
 
-let comments = document.querySelector('.post__comments');
-let publication = document.querySelector('.new-publication');
-let textarea = null;
+// let comments = document.querySelector('.post__comments');
+// let publication = document.querySelector('.new-publication');
+// let textarea = null;
 
-if (comments || publication) {
-  textarea = document.querySelectorAll('textarea');
-}
+// if (comments || publication) {
+//   textarea = document.querySelectorAll('textarea');
+// }
 const map = (typeof Map === 'function') ? new Map() : (function () {
   const keys = [];
   const values = [];
@@ -321,8 +322,8 @@ if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'functio
   };
 }
 
-if (textarea) {
-  textarea.forEach(element => {
-    autosize(element);
-  });
-}
+// if (textarea) {
+//   textarea.forEach(element => {
+//     autosize(element);
+//   });
+// }

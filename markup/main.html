@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="Description" content="Личный блог Типотека">
+  <meta name="description" content="Личный блог Типотека">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Типотека</title>
   <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" crossorigin="anonymous">
@@ -195,6 +196,19 @@
           </li>
         </ul>
       </section>
+      <div class="preview__toggle-wrapper">
+        <ul class="preview__pagination pagination">
+          <li><a class="pagination__button button button--backwards button--disabled" href="#" aria-label="Страница назад">Назад</a>
+          </li>
+          <li class="pagination__item pagination__item--active"><a href="#">1</a></li>
+          <li class="pagination__item"><a href="#">2</a></li>
+          <li class="pagination__item"><a href="#">3</a></li>
+          <li class="pagination__item"><a href="#">4</a></li>
+          <li class="pagination__item"><a href="#">5</a></li>
+          <li><a class="pagination__button button button--forward" href="#" aria-label="Страница вперед">Вперед</a>
+          </li>
+        </ul>
+      </div>
     </main>
 
     <footer class="footer">
@@ -206,8 +220,8 @@
     </footer>
   </div>
 
-  <!-- <script src="js/vendor.js"></script>
-    <script src="js/main.js"></script> -->
+  <script src="js/vendor.js"></script>
+  <script src="js/main.js"></script>
 </body>
 
 </html>
