@@ -11,9 +11,12 @@ const define = (sequelize) => Article.init({
   },
   announce: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      max: 250
+    }
   },
-  fullText: DataTypes.STRING,
+  fullText: DataTypes.TEXT,
   picture: DataTypes.STRING,
   createdDate: DataTypes.DATE
 }, {

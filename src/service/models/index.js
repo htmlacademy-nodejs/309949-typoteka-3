@@ -13,8 +13,8 @@ const define = (sequelize) => {
   const Comment = defineComment(sequelize);
   const Article = defineArticle(sequelize);
 
-  Article.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `offerId`});
-  Comment.belongsTo(Article, {foreignKey: `offerId`});
+  Article.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `articleId`});
+  Comment.belongsTo(Article, {foreignKey: `articleId`});
 
   class ArticleCategory extends Model {}
   ArticleCategory.init({}, {sequelize});
