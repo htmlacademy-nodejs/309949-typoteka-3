@@ -46,6 +46,10 @@ class API {
       data
     });
   }
+
+  getLatestComments() {
+    return this._load(`/comments`, {params: {latest: true}});
+  }
 }
 
 const defaultAPI = new API(defaultUrl, TIMEOUT);

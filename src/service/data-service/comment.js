@@ -20,6 +20,13 @@ class CommentService {
     });
   }
 
+  findLatest() {
+    return this._Comment.findAll({
+      order: [[`createdAt`, `DESC`]],
+      limit: 4
+    });
+  }
+
   async drop(id) {
     const deletedRows = this._Comment.destroy({
       where: {id}

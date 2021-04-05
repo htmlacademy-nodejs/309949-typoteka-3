@@ -7,12 +7,14 @@ const homeRouter = router();
 const api = require(`../api`).getAPI();
 
 homeRouter.get(`/`, async (req, res) => {
-  const [articles, hotArticles, categories] = await Promise.all([
+  const [articles, hotArticles, latestComments, categories] = await Promise.all([
     api.getArticles({comments: true}),
     api.getHotArticles(),
+    api.getLatestComments(),
     api.getCategories(true)
   ]);
-  res.render(`main`, {...data, articles, hotArticles, categories, main: true});
+  console.log(latestComments);
+  res.render(`main`, {...data, articles, hotArticles, latestComments, categories, main: true});
 });
 
 module.exports = homeRouter;
