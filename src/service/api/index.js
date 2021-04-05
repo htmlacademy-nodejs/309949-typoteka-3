@@ -21,7 +21,7 @@ defineModels(sequelize);
 
 (async () => {
   category(app, new CategoryService(sequelize));
-  article(app, new ArticleService(sequelize), new CommentService());
+  article(app, new ArticleService(sequelize), new CommentService(sequelize));
   search(app, new SearchService(sequelize));
 })();
 

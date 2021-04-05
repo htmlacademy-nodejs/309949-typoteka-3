@@ -5,66 +5,26 @@ block content
     h1.visually-hidden Главная страница личного блога Типотека
     p
       | Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
-    if publications
+    if categories.length
       section.main-page__theme-list
         h2.visually-hidden Список тем
         ul.themes
-          li.themes__item
-            a.themes__item-link(href="#")
-              | Автомобили
-              sup  88
-          li.themes__item
-            a.themes__item-link(href="#")
-              | Удаленная работа
-              sup  13
-          li.themes__item
-            a.themes__item-link(href="#")
-              | Бизнес
-              sup  13
-          li.themes__item
-            a.themes__item-link(href="#")
-              | Путешествия
-              sup  13
-          li.themes__item
-            a.themes__item-link.themes__item-link--padding(href="#")
-              | Дизайн и обустройство
-              sup  13
-          li.themes__item
-            a.themes__item-link(href="#")
-              | Производство игрушек
-              sup  22
-          li.themes__item
-            a.themes__item-link(href="#")
-              | UX & UI
-              sup  22
-      div(class=`main-page__section-flex ${comments ? `` : `main-page__section-flex--short`}`)
+          each category in categories
+            li.themes__item
+              a.themes__item-link(href="#")= category.name
+                sup= ` ${category.count}`
+    if articles.length
+      div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__section-flex--short`}`)
         section.main-page__hot.hot
-          if comments
+          if hotArticles.length
             h2.hot__name
               | Самое обсуждаемое
               span.hot__icon.hot__icon--fire
             ul.hot__list
-              li.hot__list-item
-                a.hot__list-link(href="#")
-                  | Билл Гейтс впервые за два года возглавил рейтинг самых богатых людей
-                  | мира по версии Bloomberg
-                  sup.hot__link-sup 12
-              li.hot__list-item
-                a.hot__list-link(href="#")
-                  | Сервис для аналитики Telegram-чатов Combot попал под блокировку из-за
-                  | информации на служебной
-                  sup.hot__link-sup 15
-                  |  странице
-              li.hot__list-item.hot__list-item--margin
-                a.hot__list-link(href="#")
-                  | Модель Кайли Дженнер продаст 51% своей компании Kylie Cosmetics
-                  | владельцу Factor за $600 млн
-                  sup.hot__link-sup 52
-              li.hot__list-item.hot__list-item--end
-                a.hot__list-link(href="#")
-                  | Tesla получила 146 тысяч предзаказов на электрический пикап Cybertruck
-                  | за двое суток
-                  sup.hot__link-sup 153
+              each hotArticle in hotArticles
+                li.hot__list-item
+                  a.hot__list-link(href="#")= truncate(hotArticle.announce, 100, true)
+                    sup.hot__link-sup= hotArticle.commentscount
           else
             h2.hot__name.hot__name--empty
               | Самое обсуждаемое
@@ -105,15 +65,15 @@ block content
         h2.visually-hidden Список превью статей
         ul.preview__list
           each article in articles
-            li.preview__item
-              ul.preview__breadcrumbs
-                each category in article.category
+            li(class=`preview__item ${article.picture ? `` : `preview__item--noimage`}`)
+              ul(class=`preview__breadcrumbs` style=`flex-wrap: wrap;`)
+                each category in article.categories
                   li.preview__breadcrumbs-item
-                    a.preview__breadcrumbs-link(href="#")= category
-              if article.image
+                    a.preview__breadcrumbs-link(href="#")= category.name
+              if article.picture
                 .preview__background
-                  img.preview__background-image(src=`/img/${article.image}` width="460" height="240" srcset=`/img/${article.image}@1x.jpg 1x $/img/{article.image}@2x.jpg 2x` alt=`${article.title}`)
-              time.preview__time(datetime=`${article.createdDate}`)= article.createdDate
+                  img.preview__background-image(src=`/img/${article.picture}@1x.jpg` width="460" height="240" srcset=`/img/${article.picture}@1x.jpg 1x, /img/${article.picture}@2x.jpg 2x` alt=`${article.title}`)
+              time.preview__time(datetime=`${article.createdDate}`)= new Date(article.createdDate).toLocaleDateString('ru')
               h3.preview__name
                 a.preview__name-link(href="#")= article.title
               p.preview__text= article.announce
@@ -121,22 +81,22 @@ block content
                 | Комментарии
                 span.preview__cloud
                 b.preview__comment-count= article.comments.length
-        .preview__toggle-wrapper
-          ul.preview__pagination.pagination
-            li
-              a.pagination__button.button.button--backwards.button--disabled(href="#" aria-label="Страница назад") Назад
-            li.pagination__item.pagination__item--active
-              a(href="#") 1
-            li.pagination__item
-              a(href="#") 2
-            li.pagination__item
-              a(href="#") 3
-            li.pagination__item
-              a(href="#") 4
-            li.pagination__item
-              a(href="#") 5
-            li
-              a.pagination__button.button.button--forward(href="#" aria-label="Страница вперед") Вперед
+      .preview__toggle-wrapper
+        ul.preview__pagination.pagination
+          li
+            a.pagination__button.button.button--backwards.button--disabled(href="#" aria-label="Страница назад") Назад
+          li.pagination__item.pagination__item--active
+            a(href="#") 1
+          li.pagination__item
+            a(href="#") 2
+          li.pagination__item
+            a(href="#") 3
+          li.pagination__item
+            a(href="#") 4
+          li.pagination__item
+            a(href="#") 5
+          li
+            a.pagination__button.button.button--forward(href="#" aria-label="Страница вперед") Вперед
     else
       .main-page__empty-wrapper
         p.main-page__empty-text Здесь пока пусто!

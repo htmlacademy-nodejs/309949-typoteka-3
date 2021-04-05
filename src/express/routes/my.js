@@ -12,7 +12,7 @@ myRouter.get(`/`, async (req, res) => {
   res.render(`my`, {...data, articles});
 });
 myRouter.get(`/comments`, async (req, res) => {
-  const articles = await api.getArticles();
+  const articles = await api.getArticles({comments: true});
   const slicedArticles = articles.slice(0, 3);
   const comments = [];
   await slicedArticles.forEach((article) => {

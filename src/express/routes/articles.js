@@ -54,7 +54,7 @@ articlesRouter.post(`/add`, upload.single(`image`), async (req, res) => {
     fullText: body.fullText,
     title: body.title,
     createdDate: `${body.createdDate} ${new Date().toLocaleTimeString()}`, // TODO временный костыль на отображение времени
-    category: body.category.filter(Boolean)
+    categories: body.category
   };
 
   try {
