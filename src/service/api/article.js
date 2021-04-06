@@ -29,8 +29,8 @@ module.exports = (app, articleService, commentService) => {
   });
 
   route.get(`/:articleId`, articleExists(articleService), async (req, res) => {
-    const {article} = res.locals;
-
+    const {articleId} = req.params;
+    const article = await articleService.findOne(articleId);
     return res.status(HttpCode.OK)
       .json(article);
   });

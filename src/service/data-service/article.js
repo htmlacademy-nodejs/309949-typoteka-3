@@ -1,6 +1,7 @@
 'use strict';
 
 const {QueryTypes} = require(`sequelize`);
+const Sequelize = require(`sequelize`);
 const sequelizeInstance = require(`../lib/sequelize`);
 const Alias = require(`../models/aliases`);
 
@@ -52,8 +53,37 @@ class ArticleService {
     return result;
   }
 
-  findOne(id) {
-    return this._Article.findByPk(id, {include: [Alias.CATEGORIES]});
+  async findOne(id) {
+    const article = await this._Article.findByPk(id, {
+      include: [
+        {
+          model: this._Category,
+          as: Alias.CATEGORIES,
+          attributes: [
+            `id`,
+            `name`,
+            [
+              Sequelize.literal(`
+                (SELECT COUNT(*) FROM "ArticleCategories" WHERE "CategoryId" = "categories"."id")
+              `),
+              `count`
+            ]
+          ],
+        },
+        Alias.COMMENTS,
+      ],
+      group: [
+        `Article.id`,
+        `categories.id`,
+        `comments.id`,
+        `categories->ArticleCategory.createdAt`,
+        `categories->ArticleCategory.updatedAt`,
+        `categories->ArticleCategory.ArticleId`,
+        `categories->ArticleCategory.CategoryId`,
+      ]
+    }
+    );
+    return article.get();
   }
 
   async update(id, article) {

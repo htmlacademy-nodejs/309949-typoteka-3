@@ -12,6 +12,9 @@ html(lang=`ru`)
                 ? subString.substring(0, (subString.lastIndexOf(``)))
                 : subString)}${subString.endsWith(`.`) ? `` : `...`}`;
       };
+      const getDateAndTime = str => {
+        return `${new Date(str).toLocaleDateString()}, ${new Date(str).toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'})}`
+      }
     // TODO add dynamic wrapper color
     .wrapper
       include ./header

@@ -7,7 +7,7 @@ div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__secti
       ul.hot__list
         each hotArticle in hotArticles
           li.hot__list-item
-            a.hot__list-link(href="#")= truncate(hotArticle.announce, 100, true)
+            a.hot__list-link(href=`/articles/${hotArticle.id}`)= truncate(hotArticle.announce, 100, true)
               sup.hot__link-sup= hotArticle.commentscount
     else
       p.hot__empty Здесь пока ничего нет...
@@ -21,6 +21,6 @@ div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__secti
           li.last__list-item
             img.last__list-image(src="img/avatar-small-1.png" width="20" height="20" alt="Аватар пользователя")
             b.last__list-name Анна Артамонова
-            a.last__list-link(href="#")= truncate(comment.text, 100, true)
+            a.last__list-link(href=`/articles/${comment.articleId}`)= truncate(comment.text, 100, true)
     else
       p.last__empty Здесь пока ничего нет...

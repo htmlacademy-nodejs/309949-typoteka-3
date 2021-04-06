@@ -47,8 +47,11 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
   res.render(`post-form`, {...data, article, categories, editMode: true});
 });
 
-articlesRouter.get(`/:id`, (req, res) => {
-  res.render(`post`, {...data, comments: [1], postPicture: true, isInputEmpty: true});
+articlesRouter.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const article = await api.getArticle(id);
+  console.log(article);
+  res.render(`post`, {...data, article, isInputEmpty: true});
 });
 
 articlesRouter.post(`/add`, upload.single(`image`), async (req, res) => {
