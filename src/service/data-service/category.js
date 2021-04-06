@@ -35,6 +35,11 @@ class CategoryService {
       return this._Category.findAll({raw: true});
     }
   }
+
+  async findOne(id) {
+    const category = await this._Category.findOne({where: {id}});
+    return category;
+  }
 }
 
 module.exports = CategoryService;

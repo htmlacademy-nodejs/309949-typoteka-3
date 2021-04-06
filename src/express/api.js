@@ -28,6 +28,11 @@ class API {
     return this._load(`/articles`, {params: {hot: true}});
   }
 
+  getArticlesByCategory(attrs) {
+    const {categoryId} = attrs;
+    return this._load(`/articles`, {params: {categoryId}});
+  }
+
   getArticle(id) {
     return this._load(`/articles/${id}`);
   }
@@ -38,6 +43,10 @@ class API {
 
   async getCategories(count) {
     return this._load(`/categories`, {params: {count}});
+  }
+
+  async getCategory(id) {
+    return this._load(`/categories/${id}`);
   }
 
   async createArticle(data) {

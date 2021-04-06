@@ -9,6 +9,7 @@ class ArticleService {
     this._Article = sequelize.models.Article;
     this._Comment = sequelize.models.Comment;
     this._Category = sequelize.models.Category;
+    this._ArticleCategory = sequelize.models.ArticleCategory;
   }
 
   async create(articleData) {
@@ -24,6 +25,20 @@ class ArticleService {
     }
     const articles = await this._Article.findAll({include});
     return articles.map((item) => item.get());
+  }
+
+  async findAllByCategory(categoryId) {
+    const articles = await this._Article.findAll({
+      where: {
+        '$articleCategories.CategoryId$': categoryId
+      },
+      include: [
+        {model: this._ArticleCategory, as: Alias.ARTICLE_CATEGORIES},
+        Alias.CATEGORIES,
+        Alias.COMMENTS
+      ]
+    });
+    return articles;
   }
 
   async findHot() {

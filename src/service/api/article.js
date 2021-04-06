@@ -16,9 +16,11 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/`, async (req, res) => {
     let articles = [];
-    const {comments, hot} = req.query;
+    const {comments, hot, categoryId} = req.query;
     if (hot) {
       articles = await articleService.findHot();
+    } else if (categoryId) {
+      articles = await articleService.findAllByCategory(categoryId);
     } else {
       articles = await articleService.findAll(comments);
     }

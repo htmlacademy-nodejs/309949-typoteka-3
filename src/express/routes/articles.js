@@ -25,8 +25,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-articlesRouter.get(`/category/:id`, (req, res) => {
-  res.render(`articles-by-category`, {...data});
+articlesRouter.get(`/category/:id`, async (req, res) => {
+  const {id} = req.params;
+  const [headCategory, categories, articles] = await Promise.all([
+    api.getCategory(id),
+    api.getCategories(true),
+    api.getArticlesByCategory({categoryId: id}),
+  ]);
+  res.render(`articles-by-category`, {...data, headCategory, categories, articles});
 });
 
 articlesRouter.get(`/add`, async (req, res) => {

@@ -13,7 +13,6 @@ homeRouter.get(`/`, async (req, res) => {
     api.getLatestComments(),
     api.getCategories(true)
   ]);
-  console.log(latestComments);
   res.render(`main`, {...data, articles, hotArticles, latestComments, categories, main: true});
 });
 
