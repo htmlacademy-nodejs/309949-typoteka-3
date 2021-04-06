@@ -8,74 +8,16 @@ block content
     if categories.length
       section.main-page__theme-list
         h2.visually-hidden Список тем
-        ul.themes
-          each category in categories
-            li.themes__item
-              a.themes__item-link(href="#")= category.name
-                sup= ` ${category.count}`
+        include ../common/categories-list
     if articles.length
-      div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__section-flex--short`}`)
-        section.main-page__hot.hot
-          h2(class=`hot__name ${hotArticles.length ? `` : `hot__name--empty`}`)
-            | Самое обсуждаемое
-            span.hot__icon.hot__icon--fire
-          if hotArticles.length
-            ul.hot__list
-              each hotArticle in hotArticles
-                li.hot__list-item
-                  a.hot__list-link(href="#")= truncate(hotArticle.announce, 100, true)
-                    sup.hot__link-sup= hotArticle.commentscount
-          else
-            p.hot__empty Здесь пока ничего нет...
-        section.main-page__last.last
-          h2.last__name
-            | Последние комментарии
-            span.last__icon.last__icon--cloud
-          if latestComments
-            ul.last__list
-              each comment in latestComments
-                li.last__list-item
-                  img.last__list-image(src="img/avatar-small-1.png" width="20" height="20" alt="Аватар пользователя")
-                  b.last__list-name Анна Артамонова
-                  a.last__list-link(href="#")= truncate(comment.text, 100, true)
-          else
-            p.last__empty Здесь пока ничего нет...
+      include ../common/featured
       section.main-page__list.preview
         h2.visually-hidden Список превью статей
-        ul.preview__list
+        ul(class="preview__list" style=`columns: ${articles.length === 1 ? 1 : 2}`)
           each article in articles
-            li(class=`preview__item ${article.picture ? `` : `preview__item--noimage`}`)
-              ul(class=`preview__breadcrumbs` style=`flex-wrap: wrap;`)
-                each category in article.categories
-                  li.preview__breadcrumbs-item
-                    a.preview__breadcrumbs-link(href="#")= category.name
-              if article.picture
-                .preview__background
-                  img.preview__background-image(src=`/img/${article.picture}@1x.jpg` width="460" height="240" srcset=`/img/${article.picture}@1x.jpg 1x, /img/${article.picture}@2x.jpg 2x` alt=`${article.title}`)
-              time.preview__time(datetime=`${article.createdDate}`)= new Date(article.createdDate).toLocaleDateString('ru')
-              h3.preview__name
-                a.preview__name-link(href="#")= article.title
-              p.preview__text= article.announce
-              a.preview__comment(href="#")
-                | Комментарии
-                span.preview__cloud
-                b.preview__comment-count= article.comments.length
+            include ../common/article-preview
       .preview__toggle-wrapper
-        ul.preview__pagination.pagination
-          li
-            a.pagination__button.button.button--backwards.button--disabled(href="#" aria-label="Страница назад") Назад
-          li.pagination__item.pagination__item--active
-            a(href="#") 1
-          li.pagination__item
-            a(href="#") 2
-          li.pagination__item
-            a(href="#") 3
-          li.pagination__item
-            a(href="#") 4
-          li.pagination__item
-            a(href="#") 5
-          li
-            a.pagination__button.button.button--forward(href="#" aria-label="Страница вперед") Вперед
+        include ../common/pagination
     else
       .main-page__empty-wrapper
         p.main-page__empty-text Здесь пока пусто!

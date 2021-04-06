@@ -1,0 +1,26 @@
+div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__section-flex--short`}`)
+  section.main-page__hot.hot
+    h2(class=`hot__name ${hotArticles.length ? `` : `hot__name--empty`}`)
+      | Самое обсуждаемое
+      span.hot__icon.hot__icon--fire
+    if hotArticles.length
+      ul.hot__list
+        each hotArticle in hotArticles
+          li.hot__list-item
+            a.hot__list-link(href="#")= truncate(hotArticle.announce, 100, true)
+              sup.hot__link-sup= hotArticle.commentscount
+    else
+      p.hot__empty Здесь пока ничего нет...
+  section.main-page__last.last
+    h2.last__name
+      | Последние комментарии
+      span.last__icon.last__icon--cloud
+    if latestComments
+      ul.last__list
+        each comment in latestComments
+          li.last__list-item
+            img.last__list-image(src="img/avatar-small-1.png" width="20" height="20" alt="Аватар пользователя")
+            b.last__list-name Анна Артамонова
+            a.last__list-link(href="#")= truncate(comment.text, 100, true)
+    else
+      p.last__empty Здесь пока ничего нет...
