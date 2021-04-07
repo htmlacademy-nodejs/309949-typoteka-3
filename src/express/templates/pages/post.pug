@@ -12,7 +12,7 @@ block content
             time.post__date(datetime=article.createdDate)= `${new Date(article.createdDate).toLocaleDateString()}, ${new Date(article.createdDate).toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'})}`
             h2.post__title.title.title--main= article.title
             ul.post__themes.themes
-              each category in article.categories
+              each category in categories
                 include ../common/category-link
           if article.picture
             .post__picture
@@ -21,10 +21,10 @@ block content
             p= article.fullText
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
-          h2.comments__title.title.title--middle= `Комментарии ${article.comments.length ? `` : `отсутствуют`}`
-          if article.comments.length
+          h2.comments__title.title.title--middle= `Комментарии ${comments.length ? `` : `отсутствуют`}`
+          if comments.length
             ul.comments__list
-              each comment in article.comments
+              each comment in comments
                 li.comments__comment
                   .comments__avatar.avatar
                     img(src="/img/avatar-1.png" alt="аватар пользователя")

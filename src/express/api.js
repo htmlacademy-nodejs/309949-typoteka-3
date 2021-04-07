@@ -28,13 +28,20 @@ class API {
     return this._load(`/articles`, {params: {hot: true}});
   }
 
-  getArticlesByCategory(attrs) {
-    const {categoryId} = attrs;
+  getArticlesByCategory(categoryId) {
     return this._load(`/articles`, {params: {categoryId}});
   }
 
   getArticle(id, include) {
     return this._load(`/articles/${id}`, {params: {include}});
+  }
+
+  getArticleComments(id) {
+    return this._load(`/articles/${id}/comments`);
+  }
+
+  getArticleCategories(id) {
+    return this._load(`/articles/${id}/categories`);
   }
 
   search(query) {

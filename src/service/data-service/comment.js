@@ -13,7 +13,13 @@ class CommentService {
     });
   }
 
-  findAll(articleId) {
+  findAll() {
+    return this._Comment.findAll({
+      raw: true
+    });
+  }
+
+  findAllForArticle(articleId) {
     return this._Comment.findAll({
       where: {articleId},
       raw: true

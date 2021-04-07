@@ -8,7 +8,7 @@ const articleExists = require(`../middleware/articleExists`);
 const articleKeys = [`category`, `title`, `createdDate`, `announce`];
 const commentKeys = [`text`];
 
-module.exports = (app, articleService, commentService) => {
+module.exports = (app, articleService, commentService, categoryService) => {
   const route = new Router();
   app.use(`/articles`, route);
 
@@ -30,8 +30,7 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/:articleId`, articleExists(articleService), async (req, res) => {
     const {articleId} = req.params;
-    const {include} = req.query;
-    const article = await articleService.findOne(articleId, JSON.parse(include));
+    const article = await articleService.findOne(articleId);
     return res.status(HttpCode.OK)
       .json(article);
   });
@@ -70,8 +69,8 @@ module.exports = (app, articleService, commentService) => {
   });
 
   route.get(`/:articleId/comments`, articleExists(articleService), async (req, res) => {
-    const {article} = res.locals;
-    const comments = await commentService.findAll(article);
+    const {articleId} = req.params;
+    const comments = await commentService.findAllForArticle(articleId);
 
     res.status(HttpCode.OK)
       .json(comments);
@@ -89,5 +88,15 @@ module.exports = (app, articleService, commentService) => {
 
     return res.status(HttpCode.OK)
       .json(comment);
+  });
+
+  // Categories
+
+  route.get(`/:articleId/categories`, articleExists(articleService), async (req, res) => {
+    const {articleId} = req.params;
+    const comments = await categoryService.findAllForArticle(articleId);
+
+    res.status(HttpCode.OK)
+      .json(comments);
   });
 };
