@@ -27,12 +27,21 @@ const upload = multer({storage});
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
-  const [headCategory, categories, articles] = await Promise.all([
-    api.getCategory(id),
-    api.getCategories(true),
-    api.getArticlesByCategory({categoryId: id}),
-  ]);
-  res.render(`articles-by-category`, {...data, headCategory, categories, articles});
+  try {
+    const [headCategory, categories, articles] = await Promise.all([
+      api.getCategory(id),
+      api.getCategories(true),
+      api.getArticlesByCategory({categoryId: id}),
+    ]);
+    res.render(`articles-by-category`, {...data, headCategory, categories, articles});
+  } catch (e) {
+    const {response} = e;
+    if (response.status === 404) {
+      res.render(`errors/400`);
+    } else {
+      res.render(`errors/500`);
+    }
+  }
 });
 
 articlesRouter.get(`/add`, async (req, res) => {
@@ -49,8 +58,17 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
 
 articlesRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id, {categories: true, comments: true});
-  res.render(`post`, {...data, article, isInputEmpty: true});
+  try {
+    const article = await api.getArticle(id, {categories: true, comments: true});
+    res.render(`post`, {...data, article, isInputEmpty: true});
+  } catch (e) {
+    const {response} = e;
+    if (response.status === 404) {
+      res.render(`errors/400`);
+    } else {
+      res.render(`errors/500`);
+    }
+  }
 });
 
 articlesRouter.post(`/add`, upload.single(`image`), async (req, res) => {
