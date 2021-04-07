@@ -13,6 +13,8 @@ module.exports = (app, service) => {
     let comments = [];
     if (latest) {
       comments = await service.findLatest();
+    } else {
+      comments = await service.findAll();
     }
     res.status(HttpCode.OK)
       .json(comments);
