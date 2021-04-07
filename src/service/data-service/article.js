@@ -53,37 +53,33 @@ class ArticleService {
     return result;
   }
 
-  async findOne(id) {
-    const article = await this._Article.findByPk(id, {
-      include: [
-        {
-          model: this._Category,
-          as: Alias.CATEGORIES,
-          attributes: [
-            `id`,
-            `name`,
-            [
-              Sequelize.literal(`
+  async findOne(id, includes = {categories: false, comments: false}) {
+    const {categories, comments} = includes;
+    const include = [];
+    if (comments) {
+      include.push(Alias.COMMENTS);
+    }
+    if (categories) {
+      include.push({
+        model: this._Category,
+        as: Alias.CATEGORIES,
+        attributes: [
+          `id`,
+          `name`,
+          [
+            Sequelize.literal(`
                 (SELECT COUNT(*) FROM "ArticleCategories" WHERE "CategoryId" = "categories"."id")
               `),
-              `count`
-            ]
-          ],
-        },
-        Alias.COMMENTS,
-      ],
-      group: [
-        `Article.id`,
-        `categories.id`,
-        `comments.id`,
-        `categories->ArticleCategory.createdAt`,
-        `categories->ArticleCategory.updatedAt`,
-        `categories->ArticleCategory.ArticleId`,
-        `categories->ArticleCategory.CategoryId`,
-      ]
+            `count`
+          ]
+        ],
+      });
+    }
+    const article = await this._Article.findByPk(id, {
+      include,
     }
     );
-    return article.get();
+    return article;
   }
 
   async update(id, article) {

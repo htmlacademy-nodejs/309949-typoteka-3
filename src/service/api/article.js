@@ -30,7 +30,8 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/:articleId`, articleExists(articleService), async (req, res) => {
     const {articleId} = req.params;
-    const article = await articleService.findOne(articleId);
+    const {include} = req.query;
+    const article = await articleService.findOne(articleId, JSON.parse(include));
     return res.status(HttpCode.OK)
       .json(article);
   });

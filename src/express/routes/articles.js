@@ -49,8 +49,7 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
 
 articlesRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id);
-  console.log(article);
+  const article = await api.getArticle(id, {categories: true, comments: true});
   res.render(`post`, {...data, article, isInputEmpty: true});
 });
 

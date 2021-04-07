@@ -33,8 +33,8 @@ class API {
     return this._load(`/articles`, {params: {categoryId}});
   }
 
-  getArticle(id) {
-    return this._load(`/articles/${id}`);
+  getArticle(id, include) {
+    return this._load(`/articles/${id}`, {params: {include}});
   }
 
   search(query) {
