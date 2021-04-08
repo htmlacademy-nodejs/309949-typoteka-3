@@ -15,8 +15,10 @@ html(lang=`ru`)
       const getDateAndTime = str => {
         return `${new Date(str).toLocaleDateString()}, ${new Date(str).toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'})}`
       }
-    // TODO add dynamic wrapper color
-    .wrapper
+      const parseSearchResult = (str, query) => {
+        return str.replace(query, `<b>${query}</b>`)
+      }
+    div(class=`${plainBackground ? 'wrapper-color' : 'wrapper'}`)
       include ./header
       block content
       include ./footer

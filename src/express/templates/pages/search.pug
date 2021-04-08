@@ -3,19 +3,19 @@ extends ../layout/layout.pug
 block content
   main
     section.search-page
-      .search-page__wrapper(class= `${!searchResults.length ? `search-page__wrapper--empty` : ``}`)
+      .search-page__wrapper(class= `${(query && !searchResults.length) ? `search-page__wrapper--empty` : ``}`)
         h1 Поиск
         .search.search-page__form
           form(action=`/search` method=`get`)
             label
-              input(type=`text` name=`query` placeholder=`Что ищем?`)
+              input(type=`text` name=`query` placeholder=`Что ищем?` value=`${query || ''}`)
             button.search__button.button.button--transparent(type=`submit`) Найти
           if searchResults.length
             each result in searchResults
               .search__result
-                time.search__date(datetime=`${result.createdDate}`)= result.createdDate
-                a.search__link= result.title
-          else
+                time.search__date(datetime=`${result.createdDate}`)= new Date(result.createdDate).toLocaleDateString('ru-RU')
+                a(class=`search__link` href=`/articles/${result.id}`) !{parseSearchResult(result.title, query)}
+          else if notFound
             p.search-page__empty Ничего не нашлось
 
 
