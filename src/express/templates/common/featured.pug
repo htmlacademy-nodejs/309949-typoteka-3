@@ -8,7 +8,7 @@ div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__secti
         each hotArticle in hotArticles
           li.hot__list-item
             a.hot__list-link(href=`/articles/${hotArticle.id}`)= truncate(hotArticle.announce, 100, true)
-              sup.hot__link-sup= hotArticle.commentscount
+              sup.hot__link-sup= hotArticle.commentsCount
     else
       p.hot__empty Здесь пока ничего нет...
   section.main-page__last.last

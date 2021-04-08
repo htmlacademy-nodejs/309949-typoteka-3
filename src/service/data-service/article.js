@@ -1,7 +1,6 @@
 'use strict';
 
-const {QueryTypes} = require(`sequelize`);
-const sequelizeInstance = require(`../lib/sequelize`);
+const Sequelize = require(`sequelize`);
 const Alias = require(`../models/aliases`);
 
 class ArticleService {
@@ -42,13 +41,19 @@ class ArticleService {
   }
 
   async findHot() {
-    const result = await sequelizeInstance.query(`
-      SELECT a.id, a.announce, COUNT(c.id) as commentsCount FROM articles a
-      LEFT OUTER JOIN comments c ON a.id = c."articleId"
-      GROUP BY a.id
-      ORDER BY commentsCount DESC
-      LIMIT 4;
-    `, {type: QueryTypes.SELECT});
+    const result = await this._Article.findAll({
+      attributes: {
+        include: [
+          [Sequelize.literal(`
+                  (SELECT COUNT(*) FROM "comments" WHERE "articleId" = "Article"."id")
+                `),
+          `commentsCount`]
+        ],
+        exclude: [`title`, `fullText`, `picture`, `createdDate`, `createdAt`, `updatedAt`]
+      },
+      order: [[Sequelize.literal(`"commentsCount"`), `DESC`]],
+      limit: 4
+    });
     return result;
   }
 
