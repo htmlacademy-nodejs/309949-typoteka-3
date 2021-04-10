@@ -5,7 +5,7 @@ const {HttpCode} = require(`../constants`);
 const keysValidator = require(`../middleware/keysValidator`);
 const articleExists = require(`../middleware/articleExists`);
 
-const articleKeys = [`category`, `title`, `createdDate`, `announce`];
+const articleKeys = [`categories`, `title`, `createdDate`, `announce`];
 const commentKeys = [`text`];
 
 module.exports = (app, articleService, commentService, categoryService) => {
@@ -36,7 +36,7 @@ module.exports = (app, articleService, commentService, categoryService) => {
   });
 
   route.post(`/`, keysValidator(articleKeys), async (req, res) => {
-    const article = articleService.create(req.body);
+    const article = await articleService.create(req.body);
 
     return res.status(HttpCode.CREATED)
       .json(article);
@@ -62,7 +62,7 @@ module.exports = (app, articleService, commentService, categoryService) => {
 
   route.post(`/:articleId/comments`, [articleExists(articleService), keysValidator(commentKeys)], async (req, res) => {
     const {article} = res.locals;
-    const comment = await commentService.create(req.body, article);
+    const comment = await commentService.create(req.body, article.id);
 
     return res.status(HttpCode.CREATED)
       .json(comment);
@@ -78,8 +78,7 @@ module.exports = (app, articleService, commentService, categoryService) => {
 
   route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), async (req, res) => {
     const {commentId} = req.params;
-    const {article} = res.locals;
-    const comment = await commentService.drop(commentId, article);
+    const comment = await commentService.drop(commentId);
 
     if (!comment) {
       return res.status(HttpCode.NOT_FOUND)
@@ -94,9 +93,8 @@ module.exports = (app, articleService, commentService, categoryService) => {
 
   route.get(`/:articleId/categories`, articleExists(articleService), async (req, res) => {
     const {articleId} = req.params;
-    const comments = await categoryService.findAllForArticle(articleId);
-
+    const categories = await categoryService.findAllForArticle(articleId);
     res.status(HttpCode.OK)
-      .json(comments);
+      .json(categories);
   });
 };
