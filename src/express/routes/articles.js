@@ -31,12 +31,12 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
     const [headCategory, categories, articles] = await Promise.all([
       api.getCategory(id),
       api.getCategories(true),
-      api.getArticlesByCategory({categoryId: id}),
+      api.getArticlesByCategory(id),
     ]);
     res.render(`articles-by-category`, {...data, headCategory, categories, articles});
   } catch (e) {
     const {response} = e;
-    if (response.status === 404) {
+    if (response && response.status === 404) {
       res.render(`errors/400`);
     } else {
       res.render(`errors/500`);
