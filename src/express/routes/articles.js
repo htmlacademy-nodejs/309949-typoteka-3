@@ -25,8 +25,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-articlesRouter.get(`/category/:id`, (req, res) => {
-  res.render(`articles-by-category`, {...data});
+articlesRouter.get(`/category/:id`, async (req, res) => {
+  const {id} = req.params;
+  try {
+    const [headCategory, categories, articles] = await Promise.all([
+      api.getCategory(id),
+      api.getCategories(true),
+      api.getArticlesByCategory(id),
+    ]);
+    res.render(`articles-by-category`, {...data, headCategory, categories, articles});
+  } catch (e) {
+    const {response} = e;
+    if (response && response.status === 404) {
+      res.render(`errors/400`);
+    } else {
+      res.render(`errors/500`);
+    }
+  }
 });
 
 articlesRouter.get(`/add`, async (req, res) => {
@@ -41,8 +56,23 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
   res.render(`post-form`, {...data, article, categories, editMode: true});
 });
 
-articlesRouter.get(`/:id`, (req, res) => {
-  res.render(`post`, {...data, comments: [1], postPicture: true, isInputEmpty: true});
+articlesRouter.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  try {
+    const [article, comments, categories] = await Promise.all([
+      api.getArticle(id),
+      api.getArticleComments(id),
+      api.getArticleCategories(id),
+    ]);
+    res.render(`post`, {...data, article, comments, categories, isInputEmpty: true});
+  } catch (e) {
+    const {response} = e;
+    if (response.status === 404) {
+      res.render(`errors/400`);
+    } else {
+      res.render(`errors/500`);
+    }
+  }
 });
 
 articlesRouter.post(`/add`, upload.single(`image`), async (req, res) => {
@@ -54,7 +84,7 @@ articlesRouter.post(`/add`, upload.single(`image`), async (req, res) => {
     fullText: body.fullText,
     title: body.title,
     createdDate: `${body.createdDate} ${new Date().toLocaleTimeString()}`, // TODO временный костыль на отображение времени
-    category: body.category.filter(Boolean)
+    categories: body.category
   };
 
   try {

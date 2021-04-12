@@ -5,47 +5,54 @@ const {HttpCode} = require(`../constants`);
 const keysValidator = require(`../middleware/keysValidator`);
 const articleExists = require(`../middleware/articleExists`);
 
-const articleKeys = [`category`, `title`, `createdDate`, `announce`];
+const articleKeys = [`categories`, `title`, `createdDate`, `announce`];
 const commentKeys = [`text`];
 
-module.exports = (app, articleService, commentService) => {
+module.exports = (app, articleService, commentService, categoryService) => {
   const route = new Router();
   app.use(`/articles`, route);
 
   // Articles
 
-  route.post(`/`, keysValidator(articleKeys), (req, res) => {
-    const article = articleService.create(req.body);
+  route.get(`/`, async (req, res) => {
+    let articles = [];
+    const {comments, hot, categoryId} = req.query;
+    if (hot) {
+      articles = await articleService.findHot();
+    } else if (categoryId) {
+      articles = await articleService.findAllByCategory(categoryId);
+    } else {
+      articles = await articleService.findAll(comments);
+    }
+    res.status(HttpCode.OK)
+      .json(articles);
+  });
+
+  route.get(`/:articleId`, articleExists(articleService), async (req, res) => {
+    const {articleId} = req.params;
+    const article = await articleService.findOne(articleId);
+    return res.status(HttpCode.OK)
+      .json(article);
+  });
+
+  route.post(`/`, keysValidator(articleKeys), async (req, res) => {
+    const article = await articleService.create(req.body);
 
     return res.status(HttpCode.CREATED)
       .json(article);
   });
 
-  route.get(`/`, (req, res) => {
-    const articles = articleService.findAll();
-
-    res.status(HttpCode.OK)
-      .json(articles);
-  });
-
-  route.get(`/:articleId`, articleExists(articleService), (req, res) => {
-    const {article} = res.locals;
+  route.put(`/:articleId`, [articleExists(articleService), keysValidator(articleKeys)], async (req, res) => {
+    const {articleId} = req.params;
+    const article = await articleService.update(articleId, req.body);
 
     return res.status(HttpCode.OK)
       .json(article);
   });
 
-  route.put(`/:articleId`, [articleExists(articleService), keysValidator(articleKeys)], (req, res) => {
+  route.delete(`/:articleId`, articleExists(articleService), async (req, res) => {
     const {articleId} = req.params;
-    const article = articleService.update(articleId, req.body);
-
-    return res.status(HttpCode.OK)
-      .json(article);
-  });
-
-  route.delete(`/:articleId`, articleExists(articleService), (req, res) => {
-    const {articleId} = req.params;
-    const article = articleService.drop(articleId);
+    const article = await articleService.drop(articleId);
 
     return res.status(HttpCode.OK)
       .json(article);
@@ -53,26 +60,25 @@ module.exports = (app, articleService, commentService) => {
 
   // Comments
 
-  route.post(`/:articleId/comments`, [articleExists(articleService), keysValidator(commentKeys)], (req, res) => {
+  route.post(`/:articleId/comments`, [articleExists(articleService), keysValidator(commentKeys)], async (req, res) => {
     const {article} = res.locals;
-    const comment = commentService.create(req.body, article);
+    const comment = await commentService.create(req.body, article.id);
 
     return res.status(HttpCode.CREATED)
       .json(comment);
   });
 
-  route.get(`/:articleId/comments`, articleExists(articleService), (req, res) => {
-    const {article} = res.locals;
-    const comments = commentService.findAll(article);
+  route.get(`/:articleId/comments`, articleExists(articleService), async (req, res) => {
+    const {articleId} = req.params;
+    const comments = await commentService.findAllForArticle(articleId);
 
     res.status(HttpCode.OK)
       .json(comments);
   });
 
-  route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), (req, res) => {
+  route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), async (req, res) => {
     const {commentId} = req.params;
-    const {article} = res.locals;
-    const comment = commentService.drop(commentId, article);
+    const comment = await commentService.drop(commentId);
 
     if (!comment) {
       return res.status(HttpCode.NOT_FOUND)
@@ -81,5 +87,14 @@ module.exports = (app, articleService, commentService) => {
 
     return res.status(HttpCode.OK)
       .json(comment);
+  });
+
+  // Categories
+
+  route.get(`/:articleId/categories`, articleExists(articleService), async (req, res) => {
+    const {articleId} = req.params;
+    const categories = await categoryService.findAllForArticle(articleId);
+    res.status(HttpCode.OK)
+      .json(categories);
   });
 };

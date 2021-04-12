@@ -2,10 +2,11 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Личный блог Типотека">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>post-page</title>
+  <title>Типотека</title>
   <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/SFProDisplay-Regular.woff2" as="font" crossorigin="anonymous">
@@ -129,7 +130,7 @@
                 <div class="avatar">
                   <img src="img/avatar-2.png" alt="аватар пользователя">
                 </div>
-                <label><textarea rows="1" placeholder="Присоединиться к обсуждению"></textarea></label>
+                <label><textarea rows="1" name="message" placeholder="Присоединиться к обсуждению"></textarea></label>
                 <button type="submit" class="comments__button button button--colored">Опубликовать</button>
               </form>
               <p class="comments__error">Сообщение не может быть пустым, напишите что-нибудь!</p>
@@ -142,11 +143,12 @@
       <a class="footer__copyright" href="#" aria-label="HTMLAcademy">
         <img src="img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy">
       </a>
-      <span>•</span>
-      <p>Типотека, 2019</p>
+      <span class="footer__dot"></span>
+      <p class="footer__text">Типотека, 2019</p>
     </footer>
   </div>
 
+  <script src="js/vendor.js"></script>
   <script src="js/main.js"></script>
 </body>
 

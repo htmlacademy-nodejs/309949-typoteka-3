@@ -7,16 +7,25 @@ const router = Router;
 const searchRouter = router();
 
 searchRouter.get(`/`, async (req, res) => {
+  const {query} = req.query;
   try {
-    const {query} = req.query;
-    const searchResults = await api.search(query);
+    let searchResults = [];
+
+    if (query) {
+      searchResults = await api.search(query);
+    }
 
     res.render(`search`, {
-      searchResults
+      searchResults,
+      plainBackground: true,
+      query
     });
   } catch (error) {
     res.render(`search`, {
-      searchResults: []
+      searchResults: [],
+      plainBackground: true,
+      query,
+      notFound: true
     });
   }
 });

@@ -8,6 +8,7 @@ module.exports.DEFAULT_PORT = 3000;
 module.exports.MAX_ID_LENGTH = 6;
 module.exports.MAX_COMMENTS = 4;
 module.exports.API_PREFIX = `/api`;
+module.exports.MOCK_PICTURES = [`forest`, `sea`, `skyscraper`];
 
 module.exports.ExitCode = {
   SUCCESS: 0,

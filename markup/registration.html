@@ -2,10 +2,11 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Личный блог Типотека">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>registration</title>
+  <title>Типотека</title>
   <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" crossorigin="anonymous">
   <link rel="preload" href="./fonts/SFProDisplay-Regular.woff2" as="font" crossorigin="anonymous">
@@ -34,58 +35,48 @@
 
     <main>
       <h1 class="visually-hidden">Регистрация пользователя</h1>
-      <section class="modal">
-        <div class="popup popup--registration">
-          <button type="button" class="popup__button button button--popup-close" aria-label="Закрыть окно">Закрыть
-            окно</button>
-          <h2 class="visually-hidden">Форма регистрации</h2>
-          <ul class="popup__tabs">
-            <li class="popup__tab popup__tab--active popup__tab--register">
-              <button type="button" class="popup__tab-switcher button">Регистрация</button>
-            </li>
-            <li class="popup__tab popup__tab--log-in">
-              <button type="button" class="popup__tab-switcher button">Войти</button>
-            </li>
-          </ul>
+      <section>
+        <div class="popup popup--registration popup--anti">
+          <a class="popup__button button button--popup-close" aria-label="Закрыть окно">Закрыть
+            окно</a>
+          <h2 class="popup__title">Регистрация</h2>
           <div class="popup__form popup__form--active form form--register">
             <form action="#" method="get">
-              <div class="form__field"><label><input type="email" placeholder="Электронная почта" required=""></label>
+              <div class="form__field"><label><input type="email" name="email" placeholder="Электронная почта" required=""></label>
               </div>
-              <div class="form__field"><label><input type="text" placeholder="Имя" required=""></label></div>
-              <div class="form__field"><label><input type="text" placeholder="Фамилия"></label></div>
-              <div class="form__field"><label><input type="password" placeholder="Пароль" required=""></label></div>
-              <div class="form__field"><label><input type="password" placeholder="Повтор пароля" required=""></label></div>
+              <div class="form__field"><label><input type="text" name="name" placeholder="Имя" required=""></label></div>
+              <div class="form__field"><label><input type="text" name="surname" placeholder="Фамилия"></label></div>
+              <div class="form__field"><label><input type="password" name="password" placeholder="Пароль" required=""></label></div>
+              <div class="form__field"><label><input type="password" name="repeat-password" placeholder="Повтор пароля" required=""></label></div>
+              <div class="form__validation-error">
+                <p class="form__error-message">При регистрации произошли ошибки:</p>
+                <ul class="form__errors">
+                  <li class="form__error">Пароль не может состоять из двух букв</li>
+                  <li class="form__error">Фамилия не должна быть смешной</li>
+                </ul>
+              </div>
               <div class="form__image-loader">
                 <a class="form__avatar avatar">
                   <img src="img/icons/smile.svg" alt="аватар пользователя">
                 </a>
-                <label><input type="file" class="visually-hidden">Загрузить фото профиля</label>
+                <label><input type="file" name="upload" class="visually-hidden">Загрузить фото профиля</label>
               </div>
               <button class="form__submit-btn form__submit-btn--register button button--colored" type="submit">Зарегистрироваться</button>
             </form>
           </div>
-          <div class="popup__form popup__form--hidden form form--log-in">
-            <form action="#" method="get">
-              <div class="form__field"><label><input type="email" placeholder="Электронная почта" required=""></label>
-              </div>
-
-              <div class="form__field"><label><input type="password" placeholder="Пароль" required=""></label></div>
-              <button class="form__submit-btn form__submit-btn--log-in button button--colored" type="submit">Войти</button>
-            </form>
-          </div>
         </div>
-        <div class="modal__overlay"></div>
       </section>
     </main>
     <footer class="footer">
       <a class="footer__copyright" href="#" aria-label="HTMLAcademy">
         <img src="img/icons/HTMLAcademyLogo.svg" width="112" height="50" alt="HTMLAcademy">
       </a>
-      <span>•</span>
-      <p>Типотека, 2019</p>
+      <span class="footer__dot"></span>
+      <p class="footer__text">Типотека, 2019</p>
     </footer>
   </div>
 
+  <script src="js/vendor.js"></script>
   <script src="js/main.js"></script>
 </body>
 

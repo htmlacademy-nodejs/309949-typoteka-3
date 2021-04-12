@@ -20,20 +20,40 @@ class API {
     return response.data;
   }
 
-  getArticles() {
-    return this._load(`/articles`);
+  getArticles(comments) {
+    return this._load(`/articles`, {params: {comments}});
   }
 
-  getArticle(id) {
-    return this._load(`/articles/${id}`);
+  getHotArticles() {
+    return this._load(`/articles`, {params: {hot: true}});
+  }
+
+  getArticlesByCategory(categoryId) {
+    return this._load(`/articles`, {params: {categoryId}});
+  }
+
+  getArticle(id, include) {
+    return this._load(`/articles/${id}`, {params: {include}});
+  }
+
+  getArticleComments(id) {
+    return this._load(`/articles/${id}/comments`);
+  }
+
+  getArticleCategories(id) {
+    return this._load(`/articles/${id}/categories`);
   }
 
   search(query) {
     return this._load(`/search`, {params: {query}});
   }
 
-  async getCategories() {
-    return this._load(`/categories`);
+  async getCategories(count) {
+    return this._load(`/categories`, {params: {count}});
+  }
+
+  async getCategory(id) {
+    return this._load(`/categories/${id}`);
   }
 
   async createArticle(data) {
@@ -41,6 +61,10 @@ class API {
       method: `POST`,
       data
     });
+  }
+
+  getLatestComments() {
+    return this._load(`/comments`, {params: {latest: true}});
   }
 }
 
