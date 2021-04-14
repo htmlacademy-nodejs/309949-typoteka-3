@@ -85,7 +85,7 @@ describe(`API returns an article with given id`, () => {
   test(`Article title is "Учим HTML и CSS"`, () => expect(response.body.title).toBe(`Учим HTML и CSS`));
 });
 
-describe.skip(`API creates an article if data is valid`, () => {
+describe(`API creates an article if data is valid`, () => {
   const newArticle = {
     categories: [1, 2],
     title: `Тест тест`,
@@ -314,7 +314,7 @@ test(`API refuses to delete non-existent comment`, async () => {
     .expect(HttpCode.NOT_FOUND);
 });
 
-describe.skip(`API returns a list of categories to one article`, () => {
+describe(`API returns a list of categories to one article`, () => {
   let response;
 
   beforeAll(async () => {
