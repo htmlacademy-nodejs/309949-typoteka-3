@@ -12,4 +12,5 @@ block content
       ul(class="preview__list" style=`columns: ${articles.length === 1 ? 1 : 2}`)
         each article in articles
           include ../common/article-preview
-
+    .preview__toggle-wrapper
+      +pagination(page, totalPages, 2, `?`)

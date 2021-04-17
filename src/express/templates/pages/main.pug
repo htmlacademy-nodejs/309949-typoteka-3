@@ -17,7 +17,7 @@ block content
           each article in articles
             include ../common/article-preview
       .preview__toggle-wrapper
-        include ../common/pagination
+        +pagination(page, totalPages, 2, `?`)
     else
       .main-page__empty-wrapper
         p.main-page__empty-text Здесь пока пусто!

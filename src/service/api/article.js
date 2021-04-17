@@ -16,11 +16,14 @@ module.exports = (app, articleService, commentService, categoryService) => {
 
   route.get(`/`, async (req, res) => {
     let articles = [];
-    const {comments, hot, categoryId} = req.query;
+    const {comments, hot, offset, limit, categoryId} = req.query;
+
     if (hot) {
       articles = await articleService.findHot();
     } else if (categoryId) {
-      articles = await articleService.findAllByCategory(categoryId);
+      articles = await articleService.findAllByCategory({limit, offset, categoryId});
+    } else if (limit || offset) {
+      articles = await articleService.findPage({limit, offset, comments});
     } else {
       articles = await articleService.findAll(comments);
     }

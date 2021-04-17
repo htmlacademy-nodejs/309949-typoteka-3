@@ -6,6 +6,7 @@ const {nanoid} = require(`nanoid`);
 const {Router} = require(`express`);
 const data = require(`../templates/data`);
 const api = require(`../api`).getAPI();
+const {OFFERS_PER_PAGE} = require(`../constants`);
 
 const router = Router;
 const articlesRouter = router();
@@ -27,13 +28,22 @@ const upload = multer({storage});
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
+
+  let {page = 1} = req.query;
+  page = +page;
+  const limit = OFFERS_PER_PAGE;
+  const offset = (page - 1) * OFFERS_PER_PAGE;
+
   try {
-    const [headCategory, categories, articles] = await Promise.all([
+    const [headCategory, categories, {count, articles}] = await Promise.all([
       api.getCategory(id),
       api.getCategories(true),
-      api.getArticlesByCategory(id),
+      api.getArticlesByCategory({limit, offset, categoryId: id}),
     ]);
-    res.render(`articles-by-category`, {...data, headCategory, categories, articles});
+
+    const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
+
+    res.render(`articles-by-category`, {...data, headCategory, categories, articles, totalPages, page});
   } catch (e) {
     const {response} = e;
     if (response && response.status === 404) {

@@ -20,16 +20,16 @@ class API {
     return response.data;
   }
 
-  getArticles(comments) {
-    return this._load(`/articles`, {params: {comments}});
+  getArticles({offset, limit, comments}) {
+    return this._load(`/articles`, {params: {offset, limit, comments}});
   }
 
   getHotArticles() {
     return this._load(`/articles`, {params: {hot: true}});
   }
 
-  getArticlesByCategory(categoryId) {
-    return this._load(`/articles`, {params: {categoryId}});
+  getArticlesByCategory({offset, limit, categoryId}) {
+    return this._load(`/articles`, {params: {offset, limit, categoryId}});
   }
 
   getArticle(id, include) {
