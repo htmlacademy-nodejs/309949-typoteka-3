@@ -26,18 +26,18 @@ class ArticleService {
     return articles.map((item) => item.get());
   }
 
-  async findAllByCategory(categoryId) {
-    const articles = await this._Article.findAll({
-      where: {
-        '$articleCategories.CategoryId$': categoryId
-      },
+  async findAllByCategory({limit, offset, categoryId}) {
+    const {count, rows} = await this._Article.findAndCountAll({
       include: [
-        {model: this._ArticleCategory, as: Alias.ARTICLE_CATEGORIES},
+        {model: this._ArticleCategory, as: Alias.ARTICLE_CATEGORIES, where: {'$articleCategories.CategoryId$': categoryId}},
         Alias.CATEGORIES,
         Alias.COMMENTS
-      ]
+      ],
+      limit,
+      offset,
+      distinct: true,
     });
-    return articles;
+    return {count, articles: rows};
   }
 
   async findHot() {
@@ -55,6 +55,23 @@ class ArticleService {
       limit: 4
     });
     return result;
+  }
+
+  async findPage({limit, offset, comments}) {
+    const include = [Alias.CATEGORIES];
+
+    if (comments) {
+      include.push(Alias.COMMENTS);
+    }
+
+    const {count, rows} = await this._Article.findAndCountAll({
+      limit,
+      offset,
+      include,
+      distinct: true
+    });
+
+    return {count, articles: rows};
   }
 
   async findOne(id) {

@@ -1,15 +1,8 @@
 ul.preview__pagination.pagination
   li
-    a.pagination__button.button.button--backwards.button--disabled(href="#" aria-label="Страница назад") Назад
-  li.pagination__item.pagination__item--active
-    a(href="#") 1
-  li.pagination__item
-    a(href="#") 2
-  li.pagination__item
-    a(href="#") 3
-  li.pagination__item
-    a(href="#") 4
-  li.pagination__item
-    a(href="#") 5
+    a.pagination__button.button.button--backwards(href=`${prefix}page=${page - 1}` aria-label=`Страница назад` class={'button--disabled': page <= 1}) Назад
+  while i++ < end
+    li.pagination__item(class={ 'pagination__item--active': i === page })
+      a(href=`${prefix}page=${i}`)= i
   li
-    a.pagination__button.button.button--forward(href="#" aria-label="Страница вперед") Вперед
+    a.pagination__button.button.button--forward(href=`${prefix}page=${page + 1}` aria-label=`Страница вперед` class={'button--disabled': totalPages <= page}) Вперёд

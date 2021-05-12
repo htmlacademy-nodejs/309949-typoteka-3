@@ -8,6 +8,8 @@ const defineArticle = require(`./article`);
 
 const Alias = require(`./aliases`);
 
+class ArticleCategory extends Model {}
+
 const define = (sequelize) => {
   const Category = defineCategory(sequelize);
   const Comment = defineComment(sequelize);
@@ -16,7 +18,6 @@ const define = (sequelize) => {
   Article.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `articleId`});
   Comment.belongsTo(Article, {foreignKey: `articleId`});
 
-  class ArticleCategory extends Model {}
   ArticleCategory.init({}, {sequelize});
 
   Article.belongsToMany(Category, {through: ArticleCategory, as: Alias.CATEGORIES});
