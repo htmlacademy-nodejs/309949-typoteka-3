@@ -88,8 +88,8 @@ describe(`API returns an article with given id`, () => {
 describe(`API creates an article if data is valid`, () => {
   const newArticle = {
     categories: [1, 2],
-    title: `Тест тест`,
-    announce: `Тестирую тестовые данные 1`,
+    title: `Тест тест, количество символов не менее 30`,
+    announce: `Тестирую тестовые данные 1, количество символов не менее 30`,
     fullText: `Полный текст тестовых данных`,
     createdDate: `2020-10-05T18:10:01.000Z`
   };
@@ -137,8 +137,8 @@ describe(`API refuses to create an article if data is invalid`, () => {
 describe(`API changes existent article`, () => {
   const updatedArticle = {
     categories: [1, 2],
-    title: `Обновленный тест`,
-    announce: `Тестирую тестовые данные 2`,
+    title: `Обновленный тест, количество символов не менее 30`,
+    announce: `Тестирую тестовые данные 2, количество символов не менее 30`,
     fullText: `Полный текст тестовых данных 2`,
     createdDate: `2020-10-05T18:10:01.000Z`
   };
@@ -159,7 +159,7 @@ describe(`API changes existent article`, () => {
   test(`Article is really changed`, () => request(app)
     .get(`/articles/1`)
     .expect((res) => {
-      expect(res.body.title).toBe(`Обновленный тест`);
+      expect(res.body.title).toBe(`Обновленный тест, количество символов не менее 30`);
     })
   );
 });
@@ -180,13 +180,61 @@ test(`API returns status code 404 when trying to change non-existent article`, a
     .expect(HttpCode.NOT_FOUND);
 });
 
-test(`API returns status code 400 when trying to change an article with invalid data`, async () => {
+test(`API returns status code 400 when trying to change an article with invalid createdDate field`, async () => {
   const app = await createAPI();
   const invalidArticle = {
     categories: [1, 2],
-    title: `Тест`,
-    announce: `Тестирую тестовые данные 3`,
+    title: `Не менее 30 символов, Не менее 30 символов`,
+    announce: `Не менее 30 символов, Не менее 30 символов`,
     fullText: `нет поля createdDate`
+  };
+
+  return request(app)
+    .put(`/articles/1`)
+    .send(invalidArticle)
+    .expect(HttpCode.BAD_REQUEST);
+});
+
+test(`API returns status code 400 when trying to change an article with empty categories`, async () => {
+  const app = await createAPI();
+  const invalidArticle = {
+    categories: [],
+    title: `Не менее 30 символов, Не менее 30 символов`,
+    announce: `Не менее 30 символов, Не менее 30 символов`,
+    fullText: `категории пустые`,
+    createdDate: `2020-10-05T18:10:01.000Z`
+  };
+
+  return request(app)
+    .put(`/articles/1`)
+    .send(invalidArticle)
+    .expect(HttpCode.BAD_REQUEST);
+});
+
+test(`API returns status code 400 when trying to change an article with invalid title`, async () => {
+  const app = await createAPI();
+  const invalidArticle = {
+    categories: [1, 2],
+    title: `менее 30 символов`,
+    announce: `Не менее 30 символов, Не менее 30 символов`,
+    fullText: `Заголовок не подходит`,
+    createdDate: `2020-10-05T18:10:01.000Z`
+  };
+
+  return request(app)
+    .put(`/articles/1`)
+    .send(invalidArticle)
+    .expect(HttpCode.BAD_REQUEST);
+});
+
+test(`API returns status code 400 when trying to change an article with invalid announce`, async () => {
+  const app = await createAPI();
+  const invalidArticle = {
+    categories: [1, 2],
+    title: `Не менее 30 символов, Не менее 30 символов`,
+    announce: `менее 30 символов`,
+    fullText: `Анонс не подходит`,
+    createdDate: `2020-10-05T18:10:01.000Z`
   };
 
   return request(app)
@@ -269,12 +317,23 @@ describe(`API creates a comment if data is valid`, () => {
   );
 });
 
-test(`API refuses to create a comment when data is invalid, and returns status code 400`, async () => {
+test(`API refuses to create a comment when data is absent, and returns status code 400`, async () => {
   const app = await createAPI();
 
   return request(app)
     .post(`/articles/1/comments`)
     .send({})
+    .expect(HttpCode.BAD_REQUEST);
+});
+
+test(`API refuses to create a comment when data is invalid, and returns status code 400`, async () => {
+  const app = await createAPI();
+  const newComment = {
+    text: `Менее 20 символов`
+  };
+  return request(app)
+    .post(`/articles/1/comments`)
+    .send(newComment)
     .expect(HttpCode.BAD_REQUEST);
 });
 

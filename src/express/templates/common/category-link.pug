@@ -1,9 +1,9 @@
 li.themes__item
   if headCategory && headCategory.name === category.name
-    a.themes__item-link.themes__item-link--active= category.name
+    a.themes__item-link.themes__item-link--active #{category.name}
       sup= ` ${category.count}`
   else
-    a.themes__item-link(href=`/articles/category/${category.id}`)= category.name
+    a.themes__item-link(href=`/articles/category/${category.id}`) #{category.name}
       sup= ` ${category.count}`
     if isAuthor
       button.themes__remove-btn(type="button") Удалить категорию

@@ -1,10 +1,10 @@
 extends ../layout/layout
 
 block content
-  section.modal.modal--flex
-    .popup.popup--new-publication.popup--flex
+  section
+    .popup.popup--new-publication.popup--anti
       .new-publication
-        form(action=`/articles/add` method=`POST` enctype=`multipart/form-data` autocomplete=`off`)
+        form(action=`${editMode ? `/articles/edit/${article.id || id}` : '/articles/add'}` method=`POST` enctype=`multipart/form-data` autocomplete=`off`)
           .new-publication__header
             h1= editMode ? `Редактировать публикацию` : `Новая публикация`
             .new-publication__date-form
@@ -12,36 +12,58 @@ block content
               .new-publication__date-form-division
                 .new-publication__date-block
                   label(for=`new-publication-date` aria-label=`Календарь`)
-                  input#new-publication-date(type=`text` name=`createdDate` placeholder=`21.03.2019` value=(article || {}).createdDate || new Date())
+                  input#new-publication-date(type=`text` name=`createdDate` placeholder=new Date().toLocaleDateString() value=(article || {}).createdDate || new Date())
             button.new-publication__button.button.button--colored(type=`submit`) Опубликовать
-          button.popup__button.button.button--popup-close(type=`button` aria-label=`Закрыть окно`)
-            | Закрыть
-            | окно
+          a.popup__button.button.button--popup-close(aria-label=`Закрыть окно`) Закрыть окно
           .new-publication__form.form
             .form__wrapper.form__wrapper--intro
               .form__field
                 label
                   input(type=`text` placeholder=`Заголовок` required=`` name=`title` value=(article || {}).title)
+              if errors && errors.find(error => error.path[0] === 'title')
+                .form__error-message= errors.find(error => error.path[0] === 'title').message
               .form__field.form__field--post-image
                 label
-                  input#image-name-field(type=`text` placeholder=`Фотография` readonly=``)
+                  input#image-name-field(type=`text` placeholder=`Фотография` readonly=`` value=(article|| {}).picture)
                 .form__image-loader.form__image-loader--publication
                   label
-                    input.visually-hidden(type=`file` name=`image`)
+                    input.visually-hidden(type=`file` name=`picture`)
                     | Обзор
-              // TODO Костыль пока новый вариант верстки не подъедет
-              div(style=`padding: 20px 0;`)
+              if errors && errors.find(error => error.path[0] === 'picture')
+                .form__error-message= errors.find(error => error.path[0] === 'picture').message
+              div.new-publication__category-wrapper
                 if categories.length
                   each category, index in categories
                     .new-publication__checkbox
-                      input(type=`checkbox` name=`category[${index}]` id=`checkbox-${index}` value=category checked=((article || {}).category ? article.category.includes(category) : false))
-                      label(for=`checkbox-${index}`)= category
+                      input(
+                        type=`checkbox`
+                        name=`categories`
+                        id=`checkbox-${index}`
+                        value=category.id
+                        checked=(
+                          (article || {}).categories
+                            ? article.categories.some(item => Number(item) === Number(category.id))
+                            : false
+                        )
+                      )
+                      label(for=`checkbox-${index}`)= category.name
                 a.new-publication__form-link.button.button--transparent(href=`#`) Добавить категорию
+              if errors && errors.find(error => error.path[0] === 'categories')
+                .form__error-message= errors.find(error => error.path[0] === 'categories').message
             .form__wrapper.form__wrapper--text
               .form__field.form__field--publication-text
                 label
-                  textarea(rows=`${editMode ? 2 : 1}` name=`announce` placeholder=`Анонс публикации`)= (article || {}).announce
+                  textarea(rows=`${editMode ? 2 : 1}` name=`announce` required=`` placeholder=`Анонс публикации`)= (article || {}).announce
+              if errors && errors.find(error => error.path[0] === 'announce')
+                .form__error-message= errors.find(error => error.path[0] === 'announce').message
               .form__field.form__field--publication-text
                 label
                   textarea(rows=`${editMode ? 5 : 1}` name=`fullText` placeholder=`Полный текст публикации`)= (article || {}).fullText
-    .modal__overlay
+              if errors && errors.find(error => error.path[0] === 'fullText')
+                .form__error-message= errors.find(error => error.path[0] === 'fullText').message
+        if errors && errors.length
+          div.form__validation-error
+            p.form__error-message #{`При ${editMode ? `редактировании` : `сохранении`} записи произошли ошибки:`}
+            ul.form__errors
+              each error in errors
+                li.form__error= error.message

@@ -10,15 +10,15 @@ block content
           .post__head
             a.post__backwards.button.button--backwards(href="javascript:history.back()") Назад
             time.post__date(datetime=article.createdDate)= `${new Date(article.createdDate).toLocaleDateString()}, ${new Date(article.createdDate).toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'})}`
-            h2.post__title.title.title--main= article.title
+            h2.post__title.title.title--main #{article.title}
             ul.post__themes.themes
               each category in categories
                 include ../common/category-link
           if article.picture
             .post__picture
-              img(src=`/img/${article.picture}@1x.jpg` srcset=`/img/${article.picture}@1x.jpg 1x, /img/${article.picture}@2x.jpg 2x` alt=`${article.title}`)
+              img(src=`/img/${article.picture}` alt=`${article.title}`)
           .post__text
-            p= article.fullText
+            p= article.fullText || article.announce
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
           h2.comments__title.title.title--middle= `Комментарии ${comments.length ? `` : `отсутствуют`}`
@@ -32,22 +32,22 @@ block content
                     .comments__head
                       p Евгений Петров •
                       time.comments__date(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
-                    p.comments__message= comment.text
-            .comments__footer(class=`${isLoggedIn ? `comments__footer--user` : `comments__footer--visitor`}`)
-              if isLoggedIn
-                form(action="#" method="POST")
-                  .comments__avatar.avatar
-                    img(src="/img/avatar-2.png" alt="аватар пользователя")
-                  label
-                    textarea(rows="1" placeholder="Присоединиться к обсуждению")
-                  button.comments__button.button.button--colored(type="submit") Опубликовать
-                if isInputEmpty
-                  p.comments__error Сообщение не может быть пустым, напишите что-нибудь!
-              else
-                button.comments__button.button.button--colored(type="submit") Войти
-                .comments__registration
-                  p.text.text--signature
-                    b.title.title--small Регистрация
-                    | Чтобы присоединиться к
-                    |     переписке
-                    |     нужно зарегистрироваться
+                    p.comments__message #{comment.text}
+          .comments__footer(class=`${isLoggedIn ? `comments__footer--user` : `comments__footer--visitor`}`)
+            if isLoggedIn
+              form(action=`/articles/${article.id}` method=`POST`)
+                .comments__avatar.avatar
+                  img(src="/img/avatar-2.png" alt="аватар пользователя")
+                label
+                  textarea(rows="1" placeholder="Присоединиться к обсуждению" name="text")= text || ''
+                button.comments__button.button.button--colored(type="submit") Опубликовать
+              if errors && errors.find(error => error.path[0] === 'text')
+                p.comments__error= errors.find(error => error.path[0] === 'text').message
+            else
+              button.comments__button.button.button--colored(type="submit") Войти
+              .comments__registration
+                p.text.text--signature
+                  b.title.title--small Регистрация
+                  | Чтобы присоединиться к
+                  |     переписке
+                  |     нужно зарегистрироваться

@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require(`express`);
+const bodyParser = require(`body-parser`);
 const homeRoutes = require(`./routes/home`);
 const registerRoutes = require(`./routes/register`);
 const loginRoutes = require(`./routes/login`);
@@ -18,6 +19,7 @@ app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));
 app.set(`views`, path.resolve(__dirname, `templates/pages`));
 app.set(`view engine`, `pug`);
 
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(`/`, homeRoutes);
 app.use(`/register`, registerRoutes);
