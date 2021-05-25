@@ -1,8 +1,5 @@
 'use strict';
 
-const multer = require(`multer`);
-const path = require(`path`);
-const {nanoid} = require(`nanoid`);
 const {Router} = require(`express`);
 
 const data = require(`../templates/data`);
@@ -12,20 +9,7 @@ const {OFFERS_PER_PAGE} = require(`../constants`);
 const router = Router;
 const articlesRouter = router();
 
-const UPLOAD_DIR = `../upload/img/`;
-
-const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_DIR);
-
-const storage = multer.diskStorage({
-  destination: uploadDirAbsolute,
-  filename: (req, file, cb) => {
-    const uniqueName = nanoid(10);
-    const extension = file.originalname.split(`.`).pop();
-    cb(null, `${uniqueName}.${extension}`);
-  }
-});
-
-const upload = multer({storage});
+const upload = require(`../lib/init-storage`);
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
@@ -92,13 +76,14 @@ articlesRouter.get(`/:id`, async (req, res) => {
 
 articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
   const {body, file} = req;
+
   const articleData = {
     picture: file ? file.filename : null,
     announce: body.announce,
     fullText: body.fullText,
     title: body.title,
     createdDate: body.createdDate,
-    categories: body.categories
+    categories: Array.isArray(body.categories) ? body.categories : [body.categories]
   };
 
   try {

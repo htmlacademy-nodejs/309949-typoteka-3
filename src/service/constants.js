@@ -9,6 +9,8 @@ module.exports.MAX_ID_LENGTH = 6;
 module.exports.MAX_COMMENTS = 4;
 module.exports.API_PREFIX = `/api`;
 module.exports.MOCK_PICTURES = [`forest.jpg`, `sea.jpg`, `skyscraper.jpg`];
+module.exports.SALT_ROUNDS = 10;
+module.exports.REGEX_ALPHA = /^[a-zа-яё]*$/miu;
 
 module.exports.ExitCode = {
   SUCCESS: 0,
@@ -48,4 +50,13 @@ module.exports.ServerMessage = {
   MAX_FULLTEXT_LENGTH: `Количество символов поля «Полный текст публикации» должно быть не более 1000`,
   MIN_COMMENT_LENGTH: `Количество символов в комментарии должно быть не менее 20`,
   COMMENT_REQUIRED: `Комментарий не может быть пустым`,
+  ALPHA_PATTERN: `Вводите только буквы`,
+  FIRST_NAME_REQUIRED: `Заполните поле «Имя»`,
+  LAST_NAME_REQUIRED: `Заполните поле «Имя»`,
+  IS_EMAIL: `Введите валидный адрес электронной почты`,
+  EMAIL_REQUIRED: `Заполните поле «Электронная почта»`,
+  PASSWORD_LENGTH: `Количество символов поля «Пароль» должно быть не менее 6`,
+  PASSWORD_REQUIRED: `Введите пароль`,
+  REPEAT_REQUIRED: `Повторно введите пароль`,
+  REPEAT_EQUAL: `Пароли должны совпадать`,
 };

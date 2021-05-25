@@ -5,7 +5,7 @@ const {generateItems} = require(`./shared`);
 
 module.exports = () => {
   const generateUser = (i, user) => {
-    return `('${user.id}', '${user.firstName}', '${user.lastName}', '${user.email}', '${user.password}', NULL, NOW())`;
+    return `('${user.id}', '${user.firstName}', '${user.lastName}', '${user.email}', '${user.password}', '${user.avatar}', NOW())`;
   };
   return generateItems(TEMPLATE_USERS, generateUser);
 };
