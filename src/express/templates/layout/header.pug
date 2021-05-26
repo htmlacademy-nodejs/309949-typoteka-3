@@ -19,7 +19,7 @@ header.header
     a.header__avatar.avatar
       img(src=`/img/avatar-2.png` alt=`аватар пользователя`)
   else if isLoggedIn && main
-    button.button.button--colored.header__button-new Новая запись
+    a.button.button--colored.header__button-new(href=`/articles/add`) Новая запись
     .header__dropdown
       a.button.button--burger.header__burger(href=`#`) Открыть меню
       ul.navigation.header__navigation

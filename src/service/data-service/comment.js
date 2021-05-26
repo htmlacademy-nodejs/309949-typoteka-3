@@ -6,31 +6,35 @@ class CommentService {
     this._Comment = sequelize.models.Comment;
   }
 
-  create(comment, articleId) {
-    return this._Comment.create({
+  async create(comment, articleId) {
+    return await this._Comment.create({
       articleId,
       ...comment
     });
   }
 
-  findAll() {
-    return this._Comment.findAll({
+  async findAll() {
+    return await this._Comment.findAll({
       raw: true
     });
   }
 
-  findAllForArticle(articleId) {
-    return this._Comment.findAll({
+  async findAllForArticle(articleId) {
+    return await this._Comment.findAll({
       where: {articleId},
       raw: true
     });
   }
 
-  findLatest() {
-    return this._Comment.findAll({
+  async findLatest() {
+    return await this._Comment.findAll({
       order: [[`createdAt`, `DESC`]],
       limit: 4
     });
+  }
+
+  async findOne(id) {
+    return await this._Comment.findByPk(id);
   }
 
   async drop(id) {

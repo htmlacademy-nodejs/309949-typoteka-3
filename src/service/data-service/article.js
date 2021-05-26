@@ -75,14 +75,17 @@ class ArticleService {
   }
 
   async findOne(id) {
-    const article = await this._Article.findByPk(id);
+    const article = await this._Article.findByPk(id, {include: [Alias.CATEGORIES]});
     return article;
   }
 
-  async update(id, article) {
-    const [affectedRows] = await this._Article.update(article, {
+  async update(id, articleData) {
+    const affectedRows = await this._Article.update(articleData, {
       where: {id}
     });
+    // sqlite не позволяет использовать returning, поэтому для тестов запрашиваем article
+    const article = await this._Article.findByPk(id);
+    await article.setCategories(articleData.categories);
     return !!affectedRows;
   }
 

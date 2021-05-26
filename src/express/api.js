@@ -20,31 +20,31 @@ class API {
     return response.data;
   }
 
-  getArticles({offset, limit, comments}) {
+  async getArticles({offset, limit, comments}) {
     return this._load(`/articles`, {params: {offset, limit, comments}});
   }
 
-  getHotArticles() {
+  async getHotArticles() {
     return this._load(`/articles`, {params: {hot: true}});
   }
 
-  getArticlesByCategory({offset, limit, categoryId}) {
+  async getArticlesByCategory({offset, limit, categoryId}) {
     return this._load(`/articles`, {params: {offset, limit, categoryId}});
   }
 
-  getArticle(id, include) {
+  async getArticle(id, include) {
     return this._load(`/articles/${id}`, {params: {include}});
   }
 
-  getArticleComments(id) {
+  async getArticleComments(id) {
     return this._load(`/articles/${id}/comments`);
   }
 
-  getArticleCategories(id) {
+  async getArticleCategories(id) {
     return this._load(`/articles/${id}/categories`);
   }
 
-  search(query) {
+  async search(query) {
     return this._load(`/search`, {params: {query}});
   }
 
@@ -63,8 +63,22 @@ class API {
     });
   }
 
-  getLatestComments() {
+  async updateArticle(data, id) {
+    return this._load(`/articles/${id}`, {
+      method: `PUT`,
+      data
+    });
+  }
+
+  async getLatestComments() {
     return this._load(`/comments`, {params: {latest: true}});
+  }
+
+  async createComment(data, articleId) {
+    return this._load(`/articles/${articleId}/comments`, {
+      method: `POST`,
+      data
+    });
   }
 }
 

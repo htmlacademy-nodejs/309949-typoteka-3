@@ -1,8 +1,9 @@
 'use strict';
 
 const {Router} = require(`express`);
+const categoryExists = require(`../middleware/category-exists`);
+const paramsValidator = require(`../middleware/params-validator`);
 const {HttpCode} = require(`../constants`);
-const categoryExists = require(`../middleware/categoryExists`);
 
 const route = new Router();
 
@@ -17,7 +18,7 @@ module.exports = (app, service) => {
       .json(categories);
   });
 
-  route.get(`/:id`, categoryExists(service), async (req, res) => {
+  route.get(`/:id`, [paramsValidator(), categoryExists(service)], async (req, res) => {
     const {id} = req.params;
     const category = await service.findOne(id);
     res.status(HttpCode.OK)

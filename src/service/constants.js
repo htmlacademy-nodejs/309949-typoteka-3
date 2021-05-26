@@ -8,7 +8,7 @@ module.exports.DEFAULT_PORT = 3000;
 module.exports.MAX_ID_LENGTH = 6;
 module.exports.MAX_COMMENTS = 4;
 module.exports.API_PREFIX = `/api`;
-module.exports.MOCK_PICTURES = [`forest`, `sea`, `skyscraper`];
+module.exports.MOCK_PICTURES = [`forest.jpg`, `sea.jpg`, `skyscraper.jpg`];
 
 module.exports.ExitCode = {
   SUCCESS: 0,
@@ -35,4 +35,17 @@ module.exports.HttpCode = {
 module.exports.Env = {
   DEVELOPMENT: `development`,
   PRODUCTION: `production`
+};
+
+module.exports.ServerMessage = {
+  MIN_TITLE_LENGTH: `Количество символов поля «Заголовок» должно быть не менее 30`,
+  MAX_TITLE_LENGTH: `Количество символов поля «Заголовок» должно быть не более 250`,
+  TITLE_REQUIRED: `Заполните поле «Заголовок»`,
+  CATEGORIES_REQUIRED: `Выберите минимум одну категорию`,
+  MIN_ANNOUNCE_LENGTH: `Количество символов поля «Анонс» должно быть не менее 30`,
+  MAX_ANNOUNCE_LENGTH: `Количество символов поля «Анонс» должно быть не более 250`,
+  ANNOUNCE_REQUIRED: `Заполните поле «Анонс»`,
+  MAX_FULLTEXT_LENGTH: `Количество символов поля «Полный текст публикации» должно быть не более 1000`,
+  MIN_COMMENT_LENGTH: `Количество символов в комментарии должно быть не менее 20`,
+  COMMENT_REQUIRED: `Комментарий не может быть пустым`,
 };
