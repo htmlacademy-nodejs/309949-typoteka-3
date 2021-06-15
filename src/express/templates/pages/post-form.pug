@@ -4,7 +4,7 @@ block content
   section
     .popup.popup--new-publication.popup--anti
       .new-publication
-        form(action=`${editMode ? `/articles/edit/${article.id || id}` : '/articles/add'}` method=`POST` enctype=`multipart/form-data` autocomplete=`off`)
+        form(action=`${editMode ? `/articles/edit/${article.id || id}` : '/articles/add'}` method=`POST` enctype=`multipart/form-data`)
           .new-publication__header
             h1= editMode ? `Редактировать публикацию` : `Новая публикация`
             .new-publication__date-form

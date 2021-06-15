@@ -3,45 +3,47 @@ extends ../layout/layout.pug
 block content
   main
     h1.visually-hidden Регистрация пользователя
-    section.modal
-      .popup.popup--registration
-        button.popup__button.button.button--popup-close(type=`button` aria-label=`Закрыть окно`)
-          | Закрыть
-          | окно
-        h2.visually-hidden Форма регистрации
-        ul.popup__tabs
-          li.popup__tab.popup__tab--active.popup__tab--register
-            a.popup__tab-switcher.button Регистрация
-          li.popup__tab.popup__tab--log-in
-            a.popup__tab-switcher.button(href=`/login`) Войти
+    section
+      .popup.popup--registration.popup--anti
+        a.popup__button.button.button--popup-close(type=`button` aria-label=`Закрыть окно`) Закрыть окно
+        h2.popup__title Регистрация
         .popup__form.popup__form--active.form.form--register
-          form(action=`#` method=`get`)
+          form(action=`/register` method=`POST` autocomplete=`off` enctype=`multipart/form-data`)
             .form__field
               label
-                input(type=`email` placeholder=`Электронная почта` required="")
+                input(name=`email` type=`email` placeholder=`Электронная почта` required value=(userData || {}).email)
+            if errors && errors.find(error => error.path[0] === `email`)
+              .form__error-message= errors.find(error => error.path[0] === `email`).message
             .form__field
               label
-                input(type=`text` placeholder=`Имя` required="")
+                input(name=`firstName` type=`text` placeholder=`Имя` required value=(userData || {}).firstName)
+            if errors && errors.find(error => error.path[0] === `firstName`)
+              .form__error-message= errors.find(error => error.path[0] === `firstName` ).message
             .form__field
               label
-                input(type=`text` placeholder=`Фамилия`)
+                input(name=`lastName` type=`text` placeholder=`Фамилия` required value=(userData || {}).lastName)
+            if errors && errors.find(error => error.path[0] === `lastName`)
+              .form__error-message= errors.find(error => error.path[0] === `lastName`).message
             .form__field
               label
-                input(type=`password` placeholder=`Пароль` required="")
+                input(name=`password` type=`password` placeholder=`Пароль` required value=(userData || {}).password)
+            if errors && errors.find(error => error.path[0] === `password`)
+              .form__error-message= errors.find(error => error.path[0] === `password`).message
             .form__field
               label
-                input(type=`password` placeholder=`Повтор пароля` required="")
-            if registerErrors
+                input(name=`repeatPassword` type=`password` placeholder=`Повтор пароля` required value=(userData || {}).repeatPassword)
+            if errors && errors.find(error => error.path[0] === `repeatPassword`)
+              .form__error-message= errors.find(error => error.path[0] === `repeatPassword`).message
+            if errors && errors.length
               .form__validation-error
                 p.form__error-message При регистрации произошли ошибки:
                 ul.form__errors
-                  li.form__error Пароль не может состоять из двух букв
-                  li.form__error Фамилия не должна быть смешной
+                  each error in errors
+                    li.form__error= error.message
             .form__image-loader
               a.form__avatar.avatar
                 img(src=`img/icons/smile.svg` alt=`аватар пользователя`)
               label
-                input.visually-hidden(type=`file`)
+                input.visually-hidden(type=`file` name=`avatar`)
                 | Загрузить фото профиля
             button.form__submit-btn.form__submit-btn--register.button.button--colored(type=`submit`) Зарегистрироваться
-      .modal__overlay

@@ -9,7 +9,7 @@ const Sequelize = require(`sequelize`);
 const initDB = require(`../../../lib/init-db`);
 const category = require(`../../category`);
 const DataService = require(`../../../data-service/category`);
-
+const {TEMPLATE_USERS} = require(`../../../cli/fill-sql/constants`);
 const {HttpCode} = require(`../../../constants`);
 
 const mockArticles = require(`../mocks/categoryMockData`);
@@ -25,7 +25,7 @@ const app = express();
 app.use(express.json());
 
 beforeAll(async () => {
-  await initDB(mockDB, {categories: mockCategories, articles: mockArticles});
+  await initDB(mockDB, {categories: mockCategories, articles: mockArticles, users: TEMPLATE_USERS});
   category(app, new DataService(mockDB));
 });
 

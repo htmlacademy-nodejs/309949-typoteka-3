@@ -24,6 +24,8 @@ const {
   ExitCode
 } = require(`../constants`);
 
+const {TEMPLATE_USERS} = require(`./fill-sql/constants`);
+
 const getRandomSubarray = (items) => {
   items = items.slice();
   let count = getRandomInt(1, items.length - 1);
@@ -47,8 +49,13 @@ const generateComments = (count, comments) => (
     text: shuffle(comments)
       .slice(0, getRandomInt(1, 3))
       .join(` `),
+    authorId: getRandomUser().id
   }))
 );
+
+const getRandomUser = () => {
+  return TEMPLATE_USERS[getRandomInt(0, TEMPLATE_USERS.length - 1)];
+};
 
 const formatDate = (date) => {
   const year = date.getFullYear();
@@ -67,6 +74,7 @@ const generatePosts = (count, titles, categories, sentences, comments) => (
     createdDate: formatDate(getRandomDate(new Date(new Date().setMonth(new Date().getMonth() - 3)), new Date())),
     categories: getRandomSubarray(categories),
     comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
+    authorId: getRandomUser().id,
   }))
 );
 
@@ -95,7 +103,8 @@ module.exports = {
       const comments = await readContent(fs, chalk, FilePath.COMMENTS);
 
       const articles = generatePosts(countPosts, titles, categories, sentences, comments);
-      return initDatabase(sequelize, {categories, articles});
+
+      return initDatabase(sequelize, {categories, articles, users: TEMPLATE_USERS});
     }
     return null; // consistent return
   }

@@ -13,6 +13,7 @@ const CommentsService = require(`../../../data-service/comment`);
 const CategoryService = require(`../../../data-service/category`);
 
 const {HttpCode} = require(`../../../constants`);
+const {TEMPLATE_USERS} = require(`../../../cli/fill-sql/constants`);
 
 const mockData = require(`../mocks/articleMockData`);
 const mockCategories = [
@@ -24,7 +25,7 @@ const mockCategories = [
 
 const createAPI = async () => {
   const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
-  await initDB(mockDB, {categories: mockCategories, articles: mockData});
+  await initDB(mockDB, {categories: mockCategories, articles: mockData, users: TEMPLATE_USERS});
   const app = express();
   app.use(express.json());
   article(app, new ArticleService(mockDB), new CommentsService(mockDB), new CategoryService(mockDB));
