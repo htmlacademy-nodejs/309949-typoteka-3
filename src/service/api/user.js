@@ -23,7 +23,7 @@ module.exports = (app, userService) => {
     const user = await userService.findByEmail(email);
 
     if (!user) {
-      res.status(HttpCode.UNAUTHORIZED).send(`E-mail or password is incorrect`);
+      res.status(HttpCode.UNAUTHORIZED).send(`Неверные имя пользователя или пароль`);
       return;
     }
 
@@ -32,7 +32,7 @@ module.exports = (app, userService) => {
       delete user.password;
       res.status(HttpCode.OK).json(user);
     } else {
-      res.status(HttpCode.UNAUTHORIZED).send(`E-mail or Password is incorrect`);
+      res.status(HttpCode.UNAUTHORIZED).send(`Неверные имя пользователя или пароль`);
     }
   });
 };

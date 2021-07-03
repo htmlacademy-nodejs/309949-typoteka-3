@@ -2,29 +2,19 @@ extends ../layout/layout.pug
 
 block content
   main
-    h1.visually-hidden Регистрация пользователя
-    section.modal
-      .popup.popup--registration
-        button.popup__button.button.button--popup-close(type=`button` aria-label=`Закрыть окно`)
-          | Закрыть
-          | окно
-        h2.visually-hidden Форма регистрации
-        ul.popup__tabs
-          li.popup__tab.popup__tab--register
-            a.popup__tab-switcher.button(href=`/register`) Регистрация
-          li.popup__tab.popup__tab--active.popup__tab--log-in
-            a.popup__tab-switcher.button Войти
+    h1.visually-hidden Логин пользователя
+    section
+      .popup.popup--registration.popup--anti
+        a.popup__button.button.button--popup-close(type=`button` aria-label=`Закрыть окно`)
+        h2.popup__title Войти
         .popup__form.popup__form--active.form.form--log-in
-          form(action=`#` method=`get`)
+          form(action=`/login` method=`POST`)
             .form__field
               label
-                input(type=`email` placeholder=`Электронная почта` required="")
-            if loginErrors.email
-              p.form__error-message Некоторая ошибка произошла, беда!
+                input(name=`email` type=`email` placeholder=`Электронная почта` required)
             .form__field
               label
-                input(type=`password` placeholder=`Пароль` required="")
-            if loginErrors.password
-              p.form__error-message Некоторая ошибка произошла, беда!
+                input(name=`password` type=`password` placeholder=`Пароль` required)
+            if error
+              .form__error-message= error
             button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type=`submit`) Войти
-      .modal__overlay
