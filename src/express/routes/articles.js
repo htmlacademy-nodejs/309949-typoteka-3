@@ -1,6 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
+const csrf = require(`csurf`);
 
 const api = require(`../api`).getAPI();
 const {OFFERS_PER_PAGE} = require(`../constants`);
@@ -10,6 +11,8 @@ const articlesRouter = router();
 
 const upload = require(`../middlewares/upload`);
 const auth = require(`../middlewares/auth`);
+
+const csrfProtection = csrf();
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
@@ -40,14 +43,14 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   }
 });
 
-articlesRouter.get(`/add`, auth, async (req, res) => {
+articlesRouter.get(`/add`, auth, csrfProtection, async (req, res) => {
   const categories = await api.getCategories();
   const {user} = req.session;
 
-  res.render(`post-form`, {user, categories, editMode: false});
+  res.render(`post-form`, {user, categories, editMode: false, csrfToken: req.csrfToken()});
 });
 
-articlesRouter.get(`/edit/:id`, auth, async (req, res) => {
+articlesRouter.get(`/edit/:id`, auth, csrfProtection, async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id);
   const allCategories = await api.getCategories();
@@ -56,10 +59,10 @@ articlesRouter.get(`/edit/:id`, auth, async (req, res) => {
   article.categories = categories;
   const {user} = req.session;
 
-  res.render(`post-form`, {user, article, categories: allCategories, editMode: true});
+  res.render(`post-form`, {user, article, categories: allCategories, editMode: true, csrfToken: req.csrfToken()});
 });
 
-articlesRouter.get(`/:id`, async (req, res) => {
+articlesRouter.get(`/:id`, csrfProtection, async (req, res) => {
   const {id} = req.params;
   try {
     const article = await api.getArticle(id); // Если id невалидный, запрос будет только один
@@ -70,7 +73,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
 
     const {user} = req.session;
 
-    res.render(`post`, {user, article, comments, categories});
+    res.render(`post`, {user, article, comments, categories, csrfToken: req.csrfToken()});
   } catch (e) {
     const {response} = e;
     if (response.status === 404) {
@@ -81,7 +84,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
   }
 });
 
-articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
+articlesRouter.post(`/add`, upload.single(`picture`), csrfProtection, async (req, res) => {
   const {body, file} = req;
   const {user} = req.session;
 
@@ -102,11 +105,11 @@ articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
     const errors = error.response.data.messages;
     const categories = await api.getCategories();
 
-    res.render(`post-form`, {user, article: articleData, categories, errors, editMode: false});
+    res.render(`post-form`, {user, article: articleData, categories, errors, editMode: false, csrfToken: req.csrfToken()});
   }
 });
 
-articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
+articlesRouter.post(`/edit/:id`, upload.single(`picture`), csrfProtection, async (req, res) => {
   const {body, file} = req;
   const {id} = req.params;
   let resultCategories = null;
@@ -135,11 +138,11 @@ articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
     const errors = error.response.data.messages;
     const categories = await api.getCategories();
 
-    res.render(`post-form`, {user, article: articleData, id, categories, errors, editMode: true});
+    res.render(`post-form`, {user, article: articleData, id, categories, errors, editMode: true, csrfToken: req.csrfToken()});
   }
 });
 
-articlesRouter.post(`/:id`, async (req, res) => {
+articlesRouter.post(`/:id`, csrfProtection, async (req, res) => {
   const {body} = req;
   const {id} = req.params;
   const {user} = req.session;
@@ -162,7 +165,7 @@ articlesRouter.post(`/:id`, async (req, res) => {
       ]);
     }
 
-    res.render(`post`, {user, article, comments, categories});
+    res.render(`post`, {user, article, comments, categories, csrfToken: req.csrfToken()});
   } catch (error) {
     const errors = error.response.data.messages;
     article = await api.getArticle(id);
@@ -171,7 +174,7 @@ articlesRouter.post(`/:id`, async (req, res) => {
       api.getArticleCategories(id),
     ]);
 
-    res.render(`post`, {user, article, comments, categories, errors, text: comment.text});
+    res.render(`post`, {user, article, comments, categories, errors, text: comment.text, csrfToken: req.csrfToken()});
   }
 });
 

@@ -36,6 +36,7 @@ block content
           .comments__footer(class=`${user ? `comments__footer--user` : `comments__footer--visitor`}`)
             if user
               form(action=`/articles/${article.id}` method=`POST`)
+                input(type="hidden" name="_csrf" value=csrfToken)
                 .comments__avatar.avatar
                   img(src=`/img/${user.avatar}` alt="аватар пользователя")
                 label
