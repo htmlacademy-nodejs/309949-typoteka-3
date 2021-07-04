@@ -8,7 +8,8 @@ const {OFFERS_PER_PAGE} = require(`../constants`);
 const router = Router;
 const articlesRouter = router();
 
-const upload = require(`../lib/init-storage`);
+const upload = require(`../middlewares/upload`);
+const auth = require(`../middlewares/auth`);
 
 articlesRouter.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
@@ -39,14 +40,14 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   }
 });
 
-articlesRouter.get(`/add`, async (req, res) => {
+articlesRouter.get(`/add`, auth, async (req, res) => {
   const categories = await api.getCategories();
   const {user} = req.session;
 
   res.render(`post-form`, {user, categories, editMode: false});
 });
 
-articlesRouter.get(`/edit/:id`, async (req, res) => {
+articlesRouter.get(`/edit/:id`, auth, async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id);
   const allCategories = await api.getCategories();
@@ -66,6 +67,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
       api.getArticleComments(id),
       api.getArticleCategories(id),
     ]);
+
     const {user} = req.session;
 
     res.render(`post`, {user, article, comments, categories});
@@ -81,6 +83,7 @@ articlesRouter.get(`/:id`, async (req, res) => {
 
 articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
   const {body, file} = req;
+  const {user} = req.session;
 
   const articleData = {
     picture: file ? file.filename : null,
@@ -88,7 +91,8 @@ articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
     fullText: body.fullText,
     title: body.title,
     createdDate: body.createdDate,
-    categories: Array.isArray(body.categories) ? body.categories : [body.categories]
+    categories: Array.isArray(body.categories) ? body.categories : [body.categories],
+    authorId: user.id
   };
 
   try {
@@ -97,7 +101,6 @@ articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
   } catch (error) {
     const errors = error.response.data.messages;
     const categories = await api.getCategories();
-    const {user} = req.session;
 
     res.render(`post-form`, {user, article: articleData, categories, errors, editMode: false});
   }
@@ -107,6 +110,7 @@ articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
   const {body, file} = req;
   const {id} = req.params;
   let resultCategories = null;
+  const {user} = req.session;
 
   if (body.categories) {
     resultCategories = Array.isArray(body.categories) ? body.categories : [body.categories];
@@ -120,7 +124,8 @@ articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
     fullText: body.fullText,
     title: body.title,
     createdDate: body.createdDate,
-    categories: resultCategories
+    categories: resultCategories,
+    authorId: user.id
   };
 
   try {
@@ -129,7 +134,6 @@ articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
   } catch (error) {
     const errors = error.response.data.messages;
     const categories = await api.getCategories();
-    const {user} = req.session;
 
     res.render(`post-form`, {user, article: articleData, id, categories, errors, editMode: true});
   }
@@ -138,16 +142,16 @@ articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
 articlesRouter.post(`/:id`, async (req, res) => {
   const {body} = req;
   const {id} = req.params;
+  const {user} = req.session;
 
   const comment = {
     text: body.text,
+    authorId: user.id
   };
 
   let article = null;
   let comments = null;
   let categories = null;
-  const {user} = req.session;
-
   try {
     const createdComment = await api.createComment(comment, id);
     if (createdComment) {

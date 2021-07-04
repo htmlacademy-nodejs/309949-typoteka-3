@@ -6,7 +6,7 @@ const logoutRouter = router();
 
 logoutRouter.get(`/`, (req, res) => {
   delete req.session.user;
-  res.redirect(`/`);
+  res.redirect(`/login`);
 });
 
 module.exports = logoutRouter;

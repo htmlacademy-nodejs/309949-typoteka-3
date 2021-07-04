@@ -15,6 +15,8 @@ header.header
           a(href=`/categories`) Категории
         li.navigation__item
           a(href=`/my/comments`) Комментарии
+        li.navigation__item
+          a(href=`/logout`) Выйти
   else if user && !user.isAdmin
     nav.header__nav
       ul.header__nav-list
@@ -23,7 +25,7 @@ header.header
         li.header__list-item
           a.header__exit(href=`/logout`) Выйти
     a.header__avatar.avatar
-      img(src=`${user.avatar}` alt=`аватар пользователя`)
+      img(src=`/img/${user.avatar}` alt=`аватар пользователя`)
   else
     nav.header__nav
       ul.header__nav-list
@@ -31,16 +33,5 @@ header.header
           a.header__registration(href=`/register`) Регистрация
         li.header__list-item
           a.header__enter(href=`/login`) Вход с паролем
-  //else if isLoggedIn && main
-  //  a.button.button--colored.header__button-new(href=`/articles/add`) Новая запись
-  //  .header__dropdown
-  //    a.button.button--burger.header__burger(href=`#`) Открыть меню
-  //    ul.navigation.header__navigation
-  //      li.navigation__item
-  //        a(href=`/`) index.html --- все ссылки
-  //      li.navigation__item
-  //        a(href=`/`) main.html --- Главная страница
-  //      li.navigation__item
-  //        a(href=`/`) main-variation.html --- Главная страница (варианты вида)
 
   a.header__search.button.button--search(href=`/search` aria-label=`поиск по сайту`)

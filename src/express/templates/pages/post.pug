@@ -33,11 +33,11 @@ block content
                       p Евгений Петров •
                       time.comments__date(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
                     p.comments__message #{comment.text}
-          .comments__footer(class=`${isLoggedIn ? `comments__footer--user` : `comments__footer--visitor`}`)
-            if isLoggedIn
+          .comments__footer(class=`${user ? `comments__footer--user` : `comments__footer--visitor`}`)
+            if user
               form(action=`/articles/${article.id}` method=`POST`)
                 .comments__avatar.avatar
-                  img(src="/img/avatar-2.png" alt="аватар пользователя")
+                  img(src=`/img/${user.avatar}` alt="аватар пользователя")
                 label
                   textarea(rows="1" placeholder="Присоединиться к обсуждению" name="text")= text || ''
                 button.comments__button.button.button--colored(type="submit") Опубликовать

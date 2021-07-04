@@ -8,7 +8,7 @@ const api = require(`../api`).getAPI();
 const router = Router;
 const registerRouter = router();
 
-const upload = require(`../lib/init-storage`);
+const upload = require(`../middlewares/upload`);
 
 registerRouter.get(`/`, (req, res) => {
   const {user} = req.session;

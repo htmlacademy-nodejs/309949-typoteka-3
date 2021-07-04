@@ -6,12 +6,14 @@ const api = require(`../api`).getAPI();
 const router = Router;
 const myRouter = router();
 
-myRouter.get(`/`, async (req, res) => {
+const auth = require(`../middlewares/auth`);
+
+myRouter.get(`/`, auth, async (req, res) => {
   const articles = await api.getArticles({});
   const {user} = req.session;
   res.render(`my`, {user, articles});
 });
-myRouter.get(`/comments`, async (req, res) => {
+myRouter.get(`/comments`, auth, async (req, res) => {
   const articles = await api.getArticles({comments: true});
   const slicedArticles = articles.slice(0, 3);
   const comments = [];
