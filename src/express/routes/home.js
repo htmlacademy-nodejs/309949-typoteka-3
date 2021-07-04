@@ -1,7 +1,6 @@
 'use strict';
 
 const {Router} = require(`express`);
-const data = require(`../templates/data`);
 const {OFFERS_PER_PAGE} = require(`../constants`);
 
 const router = Router;
@@ -23,7 +22,9 @@ homeRouter.get(`/`, async (req, res) => {
 
   const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
 
-  res.render(`main`, {...data, articles, hotArticles, latestComments, categories, main: true, totalPages, page});
+  const {user} = req.session;
+
+  res.render(`main`, {user, articles, hotArticles, latestComments, categories, main: true, totalPages, page});
 });
 
 module.exports = homeRouter;

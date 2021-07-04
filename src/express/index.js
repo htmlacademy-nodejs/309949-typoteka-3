@@ -6,6 +6,7 @@ const bodyParser = require(`body-parser`);
 const homeRoutes = require(`./routes/home`);
 const registerRoutes = require(`./routes/register`);
 const loginRoutes = require(`./routes/login`);
+const logoutRoutes = require(`./routes/logout`);
 const myRoutes = require(`./routes/my`);
 const searchRoutes = require(`./routes/search`);
 const articlesRoutes = require(`./routes/articles`);
@@ -50,6 +51,7 @@ app.use(session({
 app.use(`/`, homeRoutes);
 app.use(`/register`, registerRoutes);
 app.use(`/login`, loginRoutes);
+app.use(`/logout`, logoutRoutes);
 app.use(`/my`, myRoutes);
 app.use(`/search`, searchRoutes);
 app.use(`/articles`, articlesRoutes);

@@ -1,7 +1,6 @@
 'use strict';
 
 const {Router} = require(`express`);
-const data = require(`../templates/data`);
 const router = Router;
 const loginRouter = router();
 
@@ -9,7 +8,8 @@ const api = require(`../api`).getAPI();
 
 loginRouter.get(`/`, (req, res) => {
   const {error} = req.query;
-  res.render(`login`, {...data, error});
+  const {user} = req.session;
+  res.render(`login`, {user, error});
 });
 
 loginRouter.post(`/`, async (req, res) => {
@@ -20,6 +20,11 @@ loginRouter.post(`/`, async (req, res) => {
   } catch (error) {
     res.redirect(`/login?error=${encodeURIComponent(error.response.data)}`);
   }
+});
+
+loginRouter.get(`/logout`, (req, res) => {
+  delete req.session.user;
+  res.redirect(`/`);
 });
 
 module.exports = loginRouter;

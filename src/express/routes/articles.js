@@ -2,7 +2,6 @@
 
 const {Router} = require(`express`);
 
-const data = require(`../templates/data`);
 const api = require(`../api`).getAPI();
 const {OFFERS_PER_PAGE} = require(`../constants`);
 
@@ -27,8 +26,9 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
     ]);
 
     const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
+    const {user} = req.session;
 
-    res.render(`articles-by-category`, {...data, headCategory, categories, articles, totalPages, page});
+    res.render(`articles-by-category`, {user, headCategory, categories, articles, totalPages, page});
   } catch (e) {
     const {response} = e;
     if (response && response.status === 404) {
@@ -41,7 +41,9 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
 
 articlesRouter.get(`/add`, async (req, res) => {
   const categories = await api.getCategories();
-  res.render(`post-form`, {...data, categories, editMode: false});
+  const {user} = req.session;
+
+  res.render(`post-form`, {user, categories, editMode: false});
 });
 
 articlesRouter.get(`/edit/:id`, async (req, res) => {
@@ -51,8 +53,9 @@ articlesRouter.get(`/edit/:id`, async (req, res) => {
 
   const categories = article.categories.map((item) => item.id);
   article.categories = categories;
+  const {user} = req.session;
 
-  res.render(`post-form`, {...data, article, categories: allCategories, editMode: true});
+  res.render(`post-form`, {user, article, categories: allCategories, editMode: true});
 });
 
 articlesRouter.get(`/:id`, async (req, res) => {
@@ -63,7 +66,9 @@ articlesRouter.get(`/:id`, async (req, res) => {
       api.getArticleComments(id),
       api.getArticleCategories(id),
     ]);
-    res.render(`post`, {...data, article, comments, categories});
+    const {user} = req.session;
+
+    res.render(`post`, {user, article, comments, categories});
   } catch (e) {
     const {response} = e;
     if (response.status === 404) {
@@ -92,7 +97,9 @@ articlesRouter.post(`/add`, upload.single(`picture`), async (req, res) => {
   } catch (error) {
     const errors = error.response.data.messages;
     const categories = await api.getCategories();
-    res.render(`post-form`, {...data, article: articleData, categories, errors, editMode: false});
+    const {user} = req.session;
+
+    res.render(`post-form`, {user, article: articleData, categories, errors, editMode: false});
   }
 });
 
@@ -122,7 +129,9 @@ articlesRouter.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
   } catch (error) {
     const errors = error.response.data.messages;
     const categories = await api.getCategories();
-    res.render(`post-form`, {...data, article: articleData, id, categories, errors, editMode: true});
+    const {user} = req.session;
+
+    res.render(`post-form`, {user, article: articleData, id, categories, errors, editMode: true});
   }
 });
 
@@ -137,6 +146,7 @@ articlesRouter.post(`/:id`, async (req, res) => {
   let article = null;
   let comments = null;
   let categories = null;
+  const {user} = req.session;
 
   try {
     const createdComment = await api.createComment(comment, id);
@@ -147,7 +157,8 @@ articlesRouter.post(`/:id`, async (req, res) => {
         api.getArticleCategories(id),
       ]);
     }
-    res.render(`post`, {...data, article, comments, categories});
+
+    res.render(`post`, {user, article, comments, categories});
   } catch (error) {
     const errors = error.response.data.messages;
     article = await api.getArticle(id);
@@ -155,7 +166,8 @@ articlesRouter.post(`/:id`, async (req, res) => {
       api.getArticleComments(id),
       api.getArticleCategories(id),
     ]);
-    res.render(`post`, {...data, article, comments, categories, errors, text: comment.text});
+
+    res.render(`post`, {user, article, comments, categories, errors, text: comment.text});
   }
 });
 

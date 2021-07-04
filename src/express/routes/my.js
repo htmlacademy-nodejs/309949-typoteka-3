@@ -1,7 +1,6 @@
 'use strict';
 
 const {Router} = require(`express`);
-const data = require(`../templates/data`);
 const api = require(`../api`).getAPI();
 
 const router = Router;
@@ -9,7 +8,8 @@ const myRouter = router();
 
 myRouter.get(`/`, async (req, res) => {
   const articles = await api.getArticles({});
-  res.render(`my`, {...data, articles});
+  const {user} = req.session;
+  res.render(`my`, {user, articles});
 });
 myRouter.get(`/comments`, async (req, res) => {
   const articles = await api.getArticles({comments: true});
@@ -20,6 +20,7 @@ myRouter.get(`/comments`, async (req, res) => {
       comments.push({...comment, title: article.title, date: article.createdDate});
     });
   });
-  res.render(`comments`, {...data, comments});
+  const {user} = req.session;
+  res.render(`comments`, {user, comments});
 });
 module.exports = myRouter;

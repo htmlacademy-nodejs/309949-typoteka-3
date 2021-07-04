@@ -8,6 +8,7 @@ const searchRouter = router();
 
 searchRouter.get(`/`, async (req, res) => {
   const {query} = req.query;
+  const {user} = req.session;
   try {
     let searchResults = [];
 
@@ -16,12 +17,14 @@ searchRouter.get(`/`, async (req, res) => {
     }
 
     res.render(`search`, {
+      user,
       searchResults,
       plainBackground: true,
       query
     });
   } catch (error) {
     res.render(`search`, {
+      user,
       searchResults: [],
       plainBackground: true,
       query,
