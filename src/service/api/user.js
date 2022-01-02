@@ -5,6 +5,7 @@ const {HttpCode} = require(`../constants`);
 const validatorMiddleware = require(`../middleware/validator-middleware`);
 const userSchema = require(`../schemas/user-schema`);
 const userExists = require(`../middleware/user-exists`);
+const passwordUtils = require(`../lib/password`);
 
 module.exports = (app, userService) => {
   const route = new Router();
@@ -15,5 +16,23 @@ module.exports = (app, userService) => {
 
     return res.status(HttpCode.CREATED)
       .json(article);
+  });
+
+  route.post(`/auth`, async (req, res) => {
+    const {email, password} = req.body;
+    const user = await userService.findByEmail(email);
+
+    if (!user) {
+      res.status(HttpCode.UNAUTHORIZED).send(`Неверные имя пользователя или пароль`);
+      return;
+    }
+
+    const passwordIsCorrect = await passwordUtils.compare(password, user.password);
+    if (passwordIsCorrect) {
+      delete user.password;
+      res.status(HttpCode.OK).json(user);
+    } else {
+      res.status(HttpCode.UNAUTHORIZED).send(`Неверные имя пользователя или пароль`);
+    }
   });
 };

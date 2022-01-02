@@ -5,6 +5,7 @@ block content
     .popup.popup--new-publication.popup--anti
       .new-publication
         form(action=`${editMode ? `/articles/edit/${article.id || id}` : '/articles/add'}` method=`POST` enctype=`multipart/form-data`)
+          input(type="hidden" name="_csrf" value=csrfToken)
           .new-publication__header
             h1= editMode ? `Редактировать публикацию` : `Новая публикация`
             .new-publication__date-form

@@ -5,15 +5,14 @@ const {Router} = require(`express`);
 
 const api = require(`../api`).getAPI();
 
-const data = require(`../templates/data`);
-
 const router = Router;
 const registerRouter = router();
 
-const upload = require(`../lib/init-storage`);
+const upload = require(`../middlewares/upload`);
 
 registerRouter.get(`/`, (req, res) => {
-  res.render(`sign-up`, {...data});
+  const {user} = req.session;
+  res.render(`sign-up`, {user});
 });
 
 registerRouter.post(`/`, upload.single(`avatar`), async (req, res) => {
@@ -33,7 +32,8 @@ registerRouter.post(`/`, upload.single(`avatar`), async (req, res) => {
     res.redirect(`/login`);
   } catch (error) {
     const errors = error.response.data.messages;
-    res.render(`sign-up`, {...data, errors, userData});
+    const {user} = req.session;
+    res.render(`sign-up`, {user, errors, userData});
   }
 });
 

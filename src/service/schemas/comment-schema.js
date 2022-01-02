@@ -12,4 +12,5 @@ module.exports = Joi.object({
       'any.required': ServerMessage.COMMENT_REQUIRED,
       'any.empty': ServerMessage.COMMENT_REQUIRED,
     }),
+  authorId: Joi.number().integer().positive().required()
 });

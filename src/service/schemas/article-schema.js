@@ -49,4 +49,6 @@ module.exports = Joi.object({
     .messages({
       'string.max': ServerMessage.MAX_FULLTEXT_LENGTH,
     }),
+
+  authorId: Joi.number().integer().positive().required()
 });

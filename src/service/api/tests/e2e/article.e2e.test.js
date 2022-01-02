@@ -92,7 +92,8 @@ describe(`API creates an article if data is valid`, () => {
     title: `Тест тест, количество символов не менее 30`,
     announce: `Тестирую тестовые данные 1, количество символов не менее 30`,
     fullText: `Полный текст тестовых данных`,
-    createdDate: `2020-10-05T18:10:01.000Z`
+    createdDate: `2020-10-05T18:10:01.000Z`,
+    authorId: 1
   };
   let response;
   let app;
@@ -123,6 +124,7 @@ describe(`API refuses to create an article if data is invalid`, () => {
       title: `Тест тест`,
       description: `Тестирую тестовые данные 2`,
       picture: `test.jpg`,
+      authorId: 1
     };
     for (const key of Object.keys(newArticle)) {
       const badArticle = {...newArticle};
@@ -141,7 +143,8 @@ describe(`API changes existent article`, () => {
     title: `Обновленный тест, количество символов не менее 30`,
     announce: `Тестирую тестовые данные 2, количество символов не менее 30`,
     fullText: `Полный текст тестовых данных 2`,
-    createdDate: `2020-10-05T18:10:01.000Z`
+    createdDate: `2020-10-05T18:10:01.000Z`,
+    authorId: 1
   };
   let app;
   let response;
@@ -172,7 +175,8 @@ test(`API returns status code 404 when trying to change non-existent article`, a
     title: `Тест`,
     announce: `Тестирую тестовые данные 3`,
     fullText: `Полный текст тестовых данных 3`,
-    createdDate: `2020-10-05T18:10:01.000Z`
+    createdDate: `2020-10-05T18:10:01.000Z`,
+    authorId: 1
   };
 
   return request(app)
@@ -187,7 +191,8 @@ test(`API returns status code 400 when trying to change an article with invalid 
     categories: [1, 2],
     title: `Не менее 30 символов, Не менее 30 символов`,
     announce: `Не менее 30 символов, Не менее 30 символов`,
-    fullText: `нет поля createdDate`
+    fullText: `нет поля createdDate`,
+    authorId: 1
   };
 
   return request(app)
@@ -203,7 +208,8 @@ test(`API returns status code 400 when trying to change an article with empty ca
     title: `Не менее 30 символов, Не менее 30 символов`,
     announce: `Не менее 30 символов, Не менее 30 символов`,
     fullText: `категории пустые`,
-    createdDate: `2020-10-05T18:10:01.000Z`
+    createdDate: `2020-10-05T18:10:01.000Z`,
+    authorId: 1
   };
 
   return request(app)
@@ -219,7 +225,8 @@ test(`API returns status code 400 when trying to change an article with invalid 
     title: `менее 30 символов`,
     announce: `Не менее 30 символов, Не менее 30 символов`,
     fullText: `Заголовок не подходит`,
-    createdDate: `2020-10-05T18:10:01.000Z`
+    createdDate: `2020-10-05T18:10:01.000Z`,
+    authorId: 1
   };
 
   return request(app)
@@ -235,7 +242,24 @@ test(`API returns status code 400 when trying to change an article with invalid 
     title: `Не менее 30 символов, Не менее 30 символов`,
     announce: `менее 30 символов`,
     fullText: `Анонс не подходит`,
-    createdDate: `2020-10-05T18:10:01.000Z`
+    createdDate: `2020-10-05T18:10:01.000Z`,
+    authorId: 1
+  };
+
+  return request(app)
+    .put(`/articles/1`)
+    .send(invalidArticle)
+    .expect(HttpCode.BAD_REQUEST);
+});
+
+test(`API returns status code 400 when trying to change an article with invalid authorId`, async () => {
+  const app = await createAPI();
+  const invalidArticle = {
+    categories: [1, 2],
+    title: `Не менее 30 символов, Не менее 30 символов`,
+    announce: `Не менее 30 символов, Не менее 30 символов`,
+    fullText: `Анонс не подходит`,
+    createdDate: `2020-10-05T18:10:01.000Z`,
   };
 
   return request(app)
@@ -298,7 +322,8 @@ test(`API returns status code 404 if article id is invalid`, async () => {
 
 describe(`API creates a comment if data is valid`, () => {
   const newComment = {
-    text: `Валидному комментарию достаточно этого поля`
+    text: `Валидному комментарию достаточно этого поля`,
+    authorId: 1
   };
   let app;
   let response;
@@ -330,7 +355,19 @@ test(`API refuses to create a comment when data is absent, and returns status co
 test(`API refuses to create a comment when data is invalid, and returns status code 400`, async () => {
   const app = await createAPI();
   const newComment = {
-    text: `Менее 20 символов`
+    text: `Менее 20 символов`,
+    authorId: 1
+  };
+  return request(app)
+    .post(`/articles/1/comments`)
+    .send(newComment)
+    .expect(HttpCode.BAD_REQUEST);
+});
+
+test(`API refuses to create a comment when authorId is not present, and returns status code 400`, async () => {
+  const app = await createAPI();
+  const newComment = {
+    text: `Валидному комментарию достаточно этого поля`
   };
   return request(app)
     .post(`/articles/1/comments`)
