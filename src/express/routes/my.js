@@ -13,6 +13,7 @@ myRouter.get(`/`, auth, async (req, res) => {
   const {user} = req.session;
   res.render(`my`, {user, articles});
 });
+
 myRouter.get(`/comments`, auth, async (req, res) => {
   const articles = await api.getArticles({comments: true});
   const slicedArticles = articles.slice(0, 3);
@@ -25,4 +26,5 @@ myRouter.get(`/comments`, auth, async (req, res) => {
   const {user} = req.session;
   res.render(`comments`, {user, comments});
 });
+
 module.exports = myRouter;

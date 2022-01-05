@@ -56,6 +56,20 @@ class API {
     return this._load(`/categories/${id}`);
   }
 
+  async createCategory(data) {
+    return this._load(`/categories`, {
+      method: `POST`,
+      data
+    });
+  }
+
+  async updateCategory(data, id) {
+    return this._load(`/categories/${id}`, {
+      method: `PUT`,
+      data
+    });
+  }
+
   async createArticle(data) {
     return this._load(`/articles`, {
       method: `POST`,

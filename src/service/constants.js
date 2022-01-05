@@ -59,4 +59,7 @@ module.exports.ServerMessage = {
   PASSWORD_REQUIRED: `Введите пароль`,
   REPEAT_REQUIRED: `Повторно введите пароль`,
   REPEAT_EQUAL: `Пароли должны совпадать`,
+  MIN_CATEGORY_LENGTH: `Количество символов должно быть не менее 5`,
+  MAX_CATEGORY_LENGTH: `Количество символов должно быть не более 30`,
+  CATEGORY_REQUIRED: `Введите название категории`
 };

@@ -9,8 +9,12 @@ block content
         include ../common/categories-list
     section.articles-category__list.preview
       h2.visually-hidden Список превью статей
-      ul(class="preview__list" style=`columns: ${articles.length === 1 ? 1 : 2}`)
-        each article in articles
-          include ../common/article-preview
+      if articles.length
+        ul(class="preview__list" style=`columns: ${articles.length === 1 ? 1 : 2}`)
+          each article in articles
+            include ../common/article-preview
+      else
+    .main-page__empty-wrapper
+      p.main-page__empty-text Здесь пока пусто!
     .preview__toggle-wrapper
       +pagination(page, totalPages, 2, `?`)

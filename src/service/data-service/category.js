@@ -18,7 +18,7 @@ class CategoryService {
           [
             Sequelize.fn(
                 `COUNT`,
-                `*`
+                Sequelize.col(`CategoryId`)
             ),
             `count`
           ]
@@ -60,8 +60,18 @@ class CategoryService {
   }
 
   async findOne(id) {
-    const category = await this._Category.findOne({where: {id}});
-    return category;
+    return await this._Category.findOne({where: {id}});
+  }
+
+  async create(category) {
+    return await this._Category.create(category);
+  }
+
+  async update(id, category) {
+    const affectedRows = await this._Category.update(category, {
+      where: {id}
+    });
+    return !!affectedRows;
   }
 }
 

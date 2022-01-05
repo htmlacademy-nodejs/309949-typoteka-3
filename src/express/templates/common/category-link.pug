@@ -5,5 +5,3 @@ li.themes__item
   else
     a.themes__item-link(href=`/articles/category/${category.id}`) #{category.name}
       sup= ` ${category.count}`
-    if isAuthor
-      button.themes__remove-btn(type="button") Удалить категорию
