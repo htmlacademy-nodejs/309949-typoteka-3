@@ -9,7 +9,7 @@ block content
         .post__wrapper
           .post__head
             a.post__backwards.button.button--backwards(href="javascript:history.back()") Назад
-            time.post__date(datetime=article.createdDate)= `${new Date(article.createdDate).toLocaleDateString()}, ${new Date(article.createdDate).toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'})}`
+            time.post__date(datetime=article.createdDate)= `${new Date(article.createdDate).toLocaleDateString()}`
             h2.post__title.title.title--main #{article.title}
             ul.post__themes.themes
               each category in categories
@@ -18,7 +18,7 @@ block content
             .post__picture
               img(src=`/img/${article.picture}` alt=`${article.title}`)
           .post__text
-            p= article.fullText || article.announce
+            p= article.fullText ?  `${article.announce} ${article.fullText}` : article.announce
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
           h2.comments__title.title.title--middle= `Комментарии ${comments.length ? `` : `отсутствуют`}`
@@ -26,11 +26,12 @@ block content
             ul.comments__list
               each comment in comments
                 li.comments__comment
-                  .comments__avatar.avatar
-                    img(src="/img/avatar-1.png" alt="аватар пользователя")
+                  if comment.user.avatar
+                    .comments__avatar.avatar
+                      img(src=`/img/${comment.user.avatar}` alt="аватар пользователя")
                   .comments__text
                     .comments__head
-                      p Евгений Петров •
+                      p= `${comment.user.firstName} ${comment.user.lastName} •`
                       time.comments__date(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
                     p.comments__message #{comment.text}
           .comments__footer(class=`${user ? `comments__footer--user` : `comments__footer--visitor`}`)

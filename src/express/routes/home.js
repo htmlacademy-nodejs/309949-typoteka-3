@@ -25,7 +25,7 @@ homeRouter.get(`/`, async (req, res) => {
   const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
 
   const {user} = req.session;
-  console.log(111, latestComments);
+
   res.render(`main`, {user, articles, hotArticles: filteredHotArticles, latestComments, categories, main: true, totalPages, page});
 });
 
