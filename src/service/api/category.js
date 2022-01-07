@@ -44,4 +44,17 @@ module.exports = (app, service) => {
     return res.status(HttpCode.OK)
       .json(category);
   });
+
+  route.delete(`/:id`, [categoryExists(service)], async (req, res) => {
+    const {id} = req.params;
+    try {
+      const category = await service.drop(id);
+
+      return res.status(HttpCode.OK)
+        .json(category);
+    } catch (error) {
+      return res.status(HttpCode.BAD_REQUEST)
+        .json(error);
+    }
+  });
 };

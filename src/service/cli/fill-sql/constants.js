@@ -7,6 +7,6 @@ module.exports.CategoriesPerArticle = {
   MIN: 1
 };
 module.exports.TEMPLATE_USERS = [
-  {firstName: `Анна`, lastName: `Михайлова`, email: `mikhaylovа@mail.ru`, password: `qwerty12345`, avatar: null},
-  {firstName: `Пётр`, lastName: `Петров`, email: `petrovp@yandex.ru`, password: `12345qwerty`, avatar: null}
+  {id: 1, firstName: `Анна`, lastName: `Михайлова`, email: `mikhaylova@mail.ru`, password: `123456`, avatar: null},
+  {id: 2, firstName: `Пётр`, lastName: `Петров`, email: `petrovp@yandex.ru`, password: `123456`, avatar: null}
 ];

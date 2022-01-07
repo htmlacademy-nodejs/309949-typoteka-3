@@ -70,6 +70,16 @@ class API {
     });
   }
 
+  async deleteCategory(id) {
+    try {
+      return await this._load(`/categories/${id}`, {
+        method: `DELETE`
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   async createArticle(data) {
     return this._load(`/articles`, {
       method: `POST`,

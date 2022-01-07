@@ -12,6 +12,8 @@ block content
           button.category__button.button.button--category(type='submit') Добавить
         if errors && errors.find(error => error.path[0] === 'name')
           .form__error-message= errors.find(error => error.path[0] === 'name').message
+      if warning
+        .form__error-message(style="padding: 20px 40px 16px 35px")= warning
       ul.category__list
         each category in categories
           li.category__list-item

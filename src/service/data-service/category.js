@@ -73,6 +73,13 @@ class CategoryService {
     });
     return !!affectedRows;
   }
+
+  async drop(id) {
+    const deletedRows = await this._Category.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
+  }
 }
 
 module.exports = CategoryService;

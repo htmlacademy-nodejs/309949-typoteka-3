@@ -42,7 +42,7 @@ categoriesRouter.post(`/:id`, async (req, res) => {
   const {user} = req.session;
   const {id} = req.params;
 
-  const addCategory = async () => {
+  const updateCategory = async () => {
     const categoryData = {
       name: category
     };
@@ -60,9 +60,26 @@ categoriesRouter.post(`/:id`, async (req, res) => {
     }
   };
 
+  const deleteCategory = async () => {
+    try {
+      await api.deleteCategory(id);
+      const categories = await api.getCategories();
+
+      res.render(`all-categories`, {user, categories});
+    } catch (error) {
+      const warning = error.response.data.original.detail;
+      const categories = await api.getCategories();
+
+      res.render(`all-categories`, {user, categories, warning});
+    }
+  };
+
   switch (action) {
-    case `add`:
-      await addCategory();
+    case `update`:
+      await updateCategory();
+      break;
+    case `delete`:
+      await deleteCategory();
       break;
   }
 });
