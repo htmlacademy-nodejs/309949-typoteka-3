@@ -178,4 +178,14 @@ articlesRouter.post(`/:id`, csrfProtection, async (req, res) => {
   }
 });
 
+articlesRouter.post(`/:id/delete`, async (req, res) => {
+  const {id} = req.params;
+  const {user} = req.session;
+
+  await api.deleteArticle(id);
+  const articles = await api.getArticles({});
+
+  res.render(`my`, {user, articles});
+});
+
 module.exports = articlesRouter;

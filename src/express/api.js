@@ -44,6 +44,12 @@ class API {
     return this._load(`/articles/${id}/categories`);
   }
 
+  async deleteArticle(id) {
+    return await this._load(`/articles/${id}`, {
+      method: `DELETE`
+    });
+  }
+
   async search(query) {
     return this._load(`/search`, {params: {query}});
   }

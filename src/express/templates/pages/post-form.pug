@@ -27,10 +27,15 @@ block content
                 .form__error-message= errors.find(error => error.path[0] === 'title').message
               .form__field.form__field--post-image
                 label
-                  input#image-name-field(type=`text` placeholder=`Фотография` readonly=`` value=(article|| {}).picture)
+                  input#image-name-field(
+                    type=`text`
+                    placeholder=`Фотография`
+                    readonly=``
+                    value=(article|| {}).picture
+                  )
                 .form__image-loader.form__image-loader--publication
                   label
-                    input.visually-hidden(type=`file` name=`picture`)
+                    input.visually-hidden(type=`file` name=`picture` accept=`.png, .jpg, .jpeg`)
                     | Обзор
               if errors && errors.find(error => error.path[0] === 'picture')
                 .form__error-message= errors.find(error => error.path[0] === 'picture').message
