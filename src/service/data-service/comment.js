@@ -17,7 +17,16 @@ class CommentService {
 
   async findAll() {
     return await this._Comment.findAll({
-      raw: true
+      order: [[`createdAt`, `DESC`]],
+      include: [
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`password`]
+          }
+        }
+      ]
     });
   }
 

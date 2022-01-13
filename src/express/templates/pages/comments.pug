@@ -7,13 +7,15 @@ block content
       ul.publication__list
         each comment in comments
           li.publication__list-item
-            .publication__header
-              img.publication__list-image(src=`/img/avatar-small-2.png` width=`20` height=`20` alt=`Аватар пользователя`)
-              b.publication__list-name Александр Петров
-              time.publication__item-time(datetime=`${comment.date}`)= comment.date
-            a.publication__item-text(href=`#`) #{comment.text}
-            p.publication__text-strong= comment.title
-            button.publication__button.button.button--close-item(type=`button`)
-              span.visually-hidden Закрыть строку списка
+            form(action=`/my/comments/${comment.id}` method='POST')
+              .publication__header
+                if comment.user.avatar
+                  img.publication__list-image(src=`/img/${comment.user.avatar}` width=`20` height=`20` alt=`Аватар пользователя`)
+                b.publication__list-name= `${comment.user.firstName} ${comment.user.lastName}`
+                time.publication__item-time(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
+              a.publication__item-text(href=`/articles/${comment.articleId}`) #{comment.text}
+              p.publication__text-strong= comment.title
+              button.publication__button.button.button--close-item(type=`submit`)
+                span.visually-hidden Удалить комментарий
 
 

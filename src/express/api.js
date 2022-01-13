@@ -104,10 +104,20 @@ class API {
     return this._load(`/comments`, {params: {latest: true}});
   }
 
+  async getAllComments() {
+    return this._load(`/comments`);
+  }
+
   async createComment(data, articleId) {
     return this._load(`/articles/${articleId}/comments`, {
       method: `POST`,
       data
+    });
+  }
+
+  async deleteComment(id) {
+    return await this._load(`/comments/${id}`, {
+      method: `DELETE`
     });
   }
 
