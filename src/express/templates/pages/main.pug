@@ -10,7 +10,7 @@ block content
         h2.visually-hidden Список тем
         include ../common/categories-list
     if articles.length
-      include ../common/featured
+      include ../common/featured/main-featured
       section.main-page__list.preview
         h2.visually-hidden Список превью статей
         ul(class="preview__list" style=`columns: ${articles.length === 1 ? 1 : 2}`)

@@ -1,0 +1,7 @@
+ul.last__list
+  each comment in latestComments
+    li.last__list-item
+      if comment.user.avatar
+        img.last__list-image(src=`/img/${comment.user.avatar}` width="20" height="20" alt="Аватар пользователя")
+      b.last__list-name= `${comment.user.firstName} ${comment.user.lastName}`
+      a.last__list-link(href=`/articles/${comment.articleId}`)= truncate(comment.text, 100, true)

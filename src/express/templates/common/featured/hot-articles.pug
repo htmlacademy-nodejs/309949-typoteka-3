@@ -1,0 +1,5 @@
+ul.hot__list
+  each hotArticle in hotArticles
+    li.hot__list-item
+      a.hot__list-link(href=`/articles/${hotArticle.id}`)= truncate(hotArticle.announce, 100, true)
+        sup.hot__link-sup= hotArticle.commentsCount

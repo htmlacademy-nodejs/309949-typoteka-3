@@ -5,6 +5,7 @@ const csrf = require(`csurf`);
 
 const api = require(`../api`).getAPI();
 const {OFFERS_PER_PAGE} = require(`../constants`);
+const {HttpCode} = require(`../../service/constants`);
 
 const router = Router;
 const articlesRouter = router();
@@ -36,9 +37,9 @@ articlesRouter.get(`/category/:id`, async (req, res) => {
   } catch (e) {
     const {response} = e;
     if (response && response.status === 404) {
-      res.render(`errors/400`);
+      res.render(`errors/400`, {error: response.status});
     } else {
-      res.render(`errors/500`);
+      res.render(`errors/500`, {error: HttpCode.INTERNAL_SERVER_ERROR});
     }
   }
 });
@@ -77,9 +78,9 @@ articlesRouter.get(`/:id`, csrfProtection, async (req, res) => {
   } catch (e) {
     const {response} = e;
     if (response.status === 404) {
-      res.render(`errors/400`);
+      res.render(`errors/400`, {error: response.status});
     } else {
-      res.render(`errors/500`);
+      res.render(`errors/500`, {error: HttpCode.INTERNAL_SERVER_ERROR});
     }
   }
 });

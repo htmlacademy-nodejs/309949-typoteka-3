@@ -25,31 +25,9 @@ block content
           if comments.length
             ul.comments__list
               each comment in comments
-                li.comments__comment
-                  if comment.user.avatar
-                    .comments__avatar.avatar
-                      img(src=`/img/${comment.user.avatar}` alt="аватар пользователя")
-                  .comments__text
-                    .comments__head
-                      p= `${comment.user.firstName} ${comment.user.lastName} •`
-                      time.comments__date(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
-                    p.comments__message #{comment.text}
+                include ../common/comments/post-comment
           .comments__footer(class=`${user ? `comments__footer--user` : `comments__footer--visitor`}`)
             if user
-              form(action=`/articles/${article.id}` method=`POST`)
-                input(type="hidden" name="_csrf" value=csrfToken)
-                .comments__avatar.avatar
-                  img(src=`/img/${user.avatar}` alt="аватар пользователя")
-                label
-                  textarea(rows="1" placeholder="Присоединиться к обсуждению" name="text")= text || ''
-                button.comments__button.button.button--colored(type="submit") Опубликовать
-              if errors && errors.find(error => error.path[0] === 'text')
-                p.comments__error= errors.find(error => error.path[0] === 'text').message
+              include ../common/comments/post-comment-form
             else
-              a.comments__button.button.button--colored(href="/login") Войти
-              .comments__registration
-                p.text.text--signature
-                  b.title.title--small Регистрация
-                  | Чтобы присоединиться к
-                  |     переписке
-                  |     нужно зарегистрироваться
+              include ../common/comments/post-comment-guest
