@@ -44,6 +44,12 @@ class API {
     return this._load(`/articles/${id}/categories`);
   }
 
+  async deleteArticle(id) {
+    return await this._load(`/articles/${id}`, {
+      method: `DELETE`
+    });
+  }
+
   async search(query) {
     return this._load(`/search`, {params: {query}});
   }
@@ -54,6 +60,30 @@ class API {
 
   async getCategory(id) {
     return this._load(`/categories/${id}`);
+  }
+
+  async createCategory(data) {
+    return this._load(`/categories`, {
+      method: `POST`,
+      data
+    });
+  }
+
+  async updateCategory(data, id) {
+    return this._load(`/categories/${id}`, {
+      method: `PUT`,
+      data
+    });
+  }
+
+  async deleteCategory(id) {
+    try {
+      return await this._load(`/categories/${id}`, {
+        method: `DELETE`
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   async createArticle(data) {
@@ -74,10 +104,20 @@ class API {
     return this._load(`/comments`, {params: {latest: true}});
   }
 
+  async getAllComments() {
+    return this._load(`/comments`);
+  }
+
   async createComment(data, articleId) {
     return this._load(`/articles/${articleId}/comments`, {
       method: `POST`,
       data
+    });
+  }
+
+  async deleteComment(id) {
+    return await this._load(`/comments/${id}`, {
+      method: `DELETE`
     });
   }
 

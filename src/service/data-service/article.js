@@ -5,6 +5,7 @@ const Alias = require(`../models/aliases`);
 
 class ArticleService {
   constructor(sequelize) {
+    this._sequelize = sequelize;
     this._Article = sequelize.models.Article;
     this._Comment = sequelize.models.Comment;
     this._Category = sequelize.models.Category;
@@ -22,7 +23,13 @@ class ArticleService {
     if (needComments) {
       include.push(Alias.COMMENTS);
     }
-    const articles = await this._Article.findAll({include});
+    const articles = await this._Article.findAll({
+      include,
+      order: [
+        [`createdDate`, `DESC`]
+      ],
+    });
+
     return articles.map((item) => item.get());
   }
 
@@ -32,6 +39,9 @@ class ArticleService {
         {model: this._ArticleCategory, as: Alias.ARTICLE_CATEGORIES, where: {'$articleCategories.CategoryId$': categoryId}},
         Alias.CATEGORIES,
         Alias.COMMENTS
+      ],
+      order: [
+        [`createdDate`, `DESC`]
       ],
       limit,
       offset,
@@ -68,6 +78,9 @@ class ArticleService {
       limit,
       offset,
       include,
+      order: [
+        [`createdDate`, `DESC`]
+      ],
       distinct: true
     });
 

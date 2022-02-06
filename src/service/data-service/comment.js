@@ -1,9 +1,11 @@
 'use strict';
+const Alias = require(`../models/aliases`);
 
 class CommentService {
   constructor(sequelize) {
     this._Article = sequelize.models.Article;
     this._Comment = sequelize.models.Comment;
+    this._User = sequelize.models.User;
   }
 
   async create(comment, articleId) {
@@ -15,21 +17,50 @@ class CommentService {
 
   async findAll() {
     return await this._Comment.findAll({
-      raw: true
+      order: [[`createdAt`, `DESC`]],
+      include: [
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`password`]
+          }
+        }
+      ]
     });
   }
 
   async findAllForArticle(articleId) {
     return await this._Comment.findAll({
+      order: [[`createdAt`, `DESC`]],
       where: {articleId},
-      raw: true
+      exclude: [`authorId`],
+      include: [
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`password`]
+          }
+        }
+      ]
     });
   }
 
   async findLatest() {
     return await this._Comment.findAll({
       order: [[`createdAt`, `DESC`]],
-      limit: 4
+      limit: 4,
+      exclude: [`authorId`],
+      include: [
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`password`]
+          }
+        }
+      ]
     });
   }
 

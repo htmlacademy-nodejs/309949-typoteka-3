@@ -1,0 +1,9 @@
+li.comments__comment
+  if comment.user.avatar
+    .comments__avatar.avatar
+      img(src=`/img/${comment.user.avatar}` alt="аватар пользователя")
+  .comments__text
+    .comments__head
+      p= `${comment.user.firstName} ${comment.user.lastName} •`
+      time.comments__date(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
+    p.comments__message #{comment.text}

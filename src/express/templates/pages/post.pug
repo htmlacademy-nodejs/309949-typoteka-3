@@ -9,7 +9,7 @@ block content
         .post__wrapper
           .post__head
             a.post__backwards.button.button--backwards(href="javascript:history.back()") Назад
-            time.post__date(datetime=article.createdDate)= `${new Date(article.createdDate).toLocaleDateString()}, ${new Date(article.createdDate).toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'})}`
+            time.post__date(datetime=article.createdDate)= `${new Date(article.createdDate).toLocaleDateString()}`
             h2.post__title.title.title--main #{article.title}
             ul.post__themes.themes
               each category in categories
@@ -18,37 +18,16 @@ block content
             .post__picture
               img(src=`/img/${article.picture}` alt=`${article.title}`)
           .post__text
-            p= article.fullText || article.announce
+            p= article.fullText ?  `${article.announce} ${article.fullText}` : article.announce
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
           h2.comments__title.title.title--middle= `Комментарии ${comments.length ? `` : `отсутствуют`}`
           if comments.length
             ul.comments__list
               each comment in comments
-                li.comments__comment
-                  .comments__avatar.avatar
-                    img(src="/img/avatar-1.png" alt="аватар пользователя")
-                  .comments__text
-                    .comments__head
-                      p Евгений Петров •
-                      time.comments__date(datetime=`${comment.createdAt}`)= getDateAndTime(comment.createdAt)
-                    p.comments__message #{comment.text}
+                include ../common/comments/post-comment
           .comments__footer(class=`${user ? `comments__footer--user` : `comments__footer--visitor`}`)
             if user
-              form(action=`/articles/${article.id}` method=`POST`)
-                input(type="hidden" name="_csrf" value=csrfToken)
-                .comments__avatar.avatar
-                  img(src=`/img/${user.avatar}` alt="аватар пользователя")
-                label
-                  textarea(rows="1" placeholder="Присоединиться к обсуждению" name="text")= text || ''
-                button.comments__button.button.button--colored(type="submit") Опубликовать
-              if errors && errors.find(error => error.path[0] === 'text')
-                p.comments__error= errors.find(error => error.path[0] === 'text').message
+              include ../common/comments/post-comment-form
             else
-              a.comments__button.button.button--colored(href="/login") Войти
-              .comments__registration
-                p.text.text--signature
-                  b.title.title--small Регистрация
-                  | Чтобы присоединиться к
-                  |     переписке
-                  |     нужно зарегистрироваться
+              include ../common/comments/post-comment-guest

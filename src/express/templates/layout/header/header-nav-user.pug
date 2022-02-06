@@ -1,0 +1,8 @@
+nav.header__nav
+  ul.header__nav-list
+    li.header__list-item
+      p= `${user.firstName} ${user.lastName}`
+    li.header__list-item
+      a.header__exit(href=`/logout`) Выйти
+a.header__avatar.avatar
+  img(src=`/img/${user.avatar}` alt=`аватар пользователя`)

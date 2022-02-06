@@ -1,0 +1,9 @@
+form(action=`/articles/${article.id}` method=`POST`)
+  input(type="hidden" name="_csrf" value=csrfToken)
+  .comments__avatar.avatar
+    img(src=`/img/${user.avatar}` alt="аватар пользователя")
+  label
+    textarea(rows="1" placeholder="Присоединиться к обсуждению" name="text")= text || ''
+  button.comments__button.button.button--colored(type="submit") Опубликовать
+if errors && errors.find(error => error.path[0] === 'text')
+  p.comments__error= errors.find(error => error.path[0] === 'text').message

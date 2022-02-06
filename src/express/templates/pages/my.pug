@@ -9,6 +9,7 @@ block content
           li.notes__list-item
             time.notes__item-time(datetime=`${article.createdDate}`)= new Date(article.createdDate).toLocaleDateString()
             a.notes__item-text(href=`/articles/edit/${article.id}`) #{article.title}
-            button.notes__button.button.button--close-item(type=`button`)
-              span.visually-hidden Закрыть строку списка
+            form(action=`/articles/${article.id}/delete` method='POST')
+              button.notes__button.button.button--close-item(type='submit')
+                span.visually-hidden Закрыть строку списка
 

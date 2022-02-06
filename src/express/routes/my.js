@@ -13,16 +13,23 @@ myRouter.get(`/`, auth, async (req, res) => {
   const {user} = req.session;
   res.render(`my`, {user, articles});
 });
+
 myRouter.get(`/comments`, auth, async (req, res) => {
-  const articles = await api.getArticles({comments: true});
-  const slicedArticles = articles.slice(0, 3);
-  const comments = [];
-  await slicedArticles.forEach((article) => {
-    article.comments.forEach((comment) => {
-      comments.push({...comment, title: article.title, date: article.createdDate});
-    });
-  });
+  const comments = await api.getAllComments();
   const {user} = req.session;
+
   res.render(`comments`, {user, comments});
 });
+
+myRouter.post(`/comments/:id`, auth, async (req, res) => {
+  const {id} = req.params;
+
+  await api.deleteComment(id);
+
+  const comments = await api.getAllComments();
+  const {user} = req.session;
+
+  res.render(`comments`, {user, comments});
+});
+
 module.exports = myRouter;

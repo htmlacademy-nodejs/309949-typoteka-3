@@ -20,11 +20,13 @@ homeRouter.get(`/`, async (req, res) => {
     api.getCategories(true)
   ]);
 
+  const filteredHotArticles = hotArticles.filter((article) => article.commentsCount > 0);
+
   const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
 
   const {user} = req.session;
 
-  res.render(`main`, {user, articles, hotArticles, latestComments, categories, main: true, totalPages, page});
+  res.render(`main`, {user, articles, hotArticles: filteredHotArticles, latestComments, categories, main: true, totalPages, page});
 });
 
 module.exports = homeRouter;

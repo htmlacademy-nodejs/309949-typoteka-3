@@ -1,0 +1,17 @@
+div(class=`main-page__section-flex ${hotArticles.length ? `` : `main-page__section-flex--short`}`)
+  section.main-page__hot.hot
+    h2(class=`hot__name ${hotArticles.length ? `` : `hot__name--empty`}`)
+      | Самое обсуждаемое
+      span.hot__icon.hot__icon--fire
+    if hotArticles.length
+      include hot-articles
+    else
+      p.hot__empty Здесь пока ничего нет...
+  section.main-page__last.last
+    h2.last__name
+      | Последние комментарии
+      span.last__icon.last__icon--cloud
+    if latestComments.length
+      include latest-comments
+    else
+      p.last__empty Здесь пока ничего нет...

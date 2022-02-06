@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const {HttpCode} = require(`../constants`);
+const commentExists = require(`../middleware/comment-exists`);
 
 const route = new Router();
 
@@ -18,5 +19,19 @@ module.exports = (app, service) => {
     }
     res.status(HttpCode.OK)
       .json(comments);
+  });
+
+  route.delete(`/:id`, [commentExists(service)], async (req, res) => {
+    const {id} = req.params;
+
+    try {
+      const comment = await service.drop(id);
+
+      return res.status(HttpCode.OK)
+        .json(comment);
+    } catch (error) {
+      return res.status(HttpCode.BAD_REQUEST)
+        .json(error);
+    }
   });
 };

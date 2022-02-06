@@ -8,6 +8,8 @@ const UPLOAD_DIR = `../upload/img/`;
 
 const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_DIR);
 
+const FILE_TYPES = [`image/png`, `image/jpg`, `image/jpeg`];
+
 const storage = multer.diskStorage({
   destination: uploadDirAbsolute,
   filename: (req, file, cb) => {
@@ -17,4 +19,12 @@ const storage = multer.diskStorage({
   }
 });
 
-module.exports = multer({storage});
+const fileFilter = (req, file, cb) => {
+  if (FILE_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+module.exports = multer({storage, fileFilter});

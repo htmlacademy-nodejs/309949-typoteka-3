@@ -3,6 +3,8 @@
 const {Router} = require(`express`);
 const categoryExists = require(`../middleware/category-exists`);
 const paramsValidator = require(`../middleware/params-validator`);
+const validatorMiddleware = require(`../middleware/validator-middleware`);
+const categorySchema = require(`../schemas/category-schema`);
 const {HttpCode} = require(`../constants`);
 
 const route = new Router();
@@ -23,5 +25,36 @@ module.exports = (app, service) => {
     const category = await service.findOne(id);
     res.status(HttpCode.OK)
       .json(category);
+  });
+
+  route.post(
+      `/`,
+      [validatorMiddleware(categorySchema)],
+      async (req, res) => {
+        const category = await service.create(req.body);
+
+        return res.status(HttpCode.CREATED).json(category);
+      }
+  );
+
+  route.put(`/:id`, [categoryExists(service), validatorMiddleware(categorySchema)], async (req, res) => {
+    const {id} = req.params;
+    const category = await service.update(id, req.body);
+
+    return res.status(HttpCode.OK)
+      .json(category);
+  });
+
+  route.delete(`/:id`, [categoryExists(service)], async (req, res) => {
+    const {id} = req.params;
+    try {
+      const category = await service.drop(id);
+
+      return res.status(HttpCode.OK)
+        .json(category);
+    } catch (error) {
+      return res.status(HttpCode.BAD_REQUEST)
+        .json(error);
+    }
   });
 };
