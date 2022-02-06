@@ -68,6 +68,9 @@ module.exports = (app, articleService, commentService, categoryService) => {
     const {article} = res.locals;
     const comment = await commentService.create(req.body, article.id);
 
+    const io = req.app.locals.socketio;
+    io.emit(`comment:create`, comment);
+
     return res.status(HttpCode.CREATED)
       .json(comment);
   });

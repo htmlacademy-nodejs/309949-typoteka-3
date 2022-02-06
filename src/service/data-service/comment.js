@@ -9,9 +9,21 @@ class CommentService {
   }
 
   async create(comment, articleId) {
-    return await this._Comment.create({
+    const createdComment = await this._Comment.create({
       articleId,
       ...comment
+    });
+
+    return await this._Comment.findByPk(createdComment.id, {
+      include: [
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`password`]
+          }
+        }
+      ]
     });
   }
 
