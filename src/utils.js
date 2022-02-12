@@ -28,3 +28,13 @@ module.exports.readContent = async (fs, chalk, filePath) => {
     return [];
   }
 };
+
+module.exports.truncate = (str, n, useWordBoundary) => {
+  if (str.length <= n) {
+    return str;
+  }
+  const subString = str.substring(0, n - 1).trim();
+  return `${(useWordBoundary
+    ? subString.substring(0, (subString.lastIndexOf(``)))
+    : subString)}${subString.endsWith(`.`) ? `` : `...`}`;
+};

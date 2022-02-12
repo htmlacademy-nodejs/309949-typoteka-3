@@ -1,4 +1,6 @@
 'use strict';
+
+const Sequelize = require(`sequelize`);
 const Alias = require(`../models/aliases`);
 
 class CommentService {
@@ -21,6 +23,19 @@ class CommentService {
           as: Alias.USERS,
           attributes: {
             exclude: [`password`]
+          }
+        },
+        {
+          model: this._Article,
+          as: Alias.ARTICLE,
+          attributes: {
+            include: [
+              [Sequelize.literal(`
+                  (SELECT COUNT(*) FROM "comments" WHERE "articleId" = "article"."id")
+                `),
+              `commentsCount`]
+            ],
+            exclude: [`title`, `fullText`, `picture`, `createdDate`, `createdAt`, `updatedAt`]
           }
         }
       ]

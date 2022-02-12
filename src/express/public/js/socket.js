@@ -34,7 +34,34 @@
     commentsWrapper.prepend(createCommentElement(comment));
   }
 
+  const createHotArticleElement = (article) => {
+    const hotArticleTemplate = document.querySelector('#article-template');
+    const hotArticleElement = hotArticleTemplate.cloneNode(true).content;
+    const hotArticleLink = hotArticleElement.querySelector('.hot__list-link')
+    hotArticleLink.querySelector('span').textContent = article.announce
+    hotArticleLink.href = `articles/${article.id}`;
+    hotArticleLink.querySelector('.hot__link-sup').textContent = article.commentsCount;
+
+    return hotArticleElement;
+  }
+
+  const updateHotArticles = (hotArticles) => {
+    const hotArticlesWrapper = document.querySelector('.hot__list');
+    const hotArticlesElements = hotArticlesWrapper.querySelectorAll('.hot__list-item');
+    for (const article of hotArticlesElements) {
+      article.remove()
+    }
+
+    for (const newArticle of hotArticles) {
+      hotArticlesWrapper.append(createHotArticleElement(newArticle));
+    }
+  }
+
   socket.addEventListener(`comment:create`, (comment) => {
     updateCommentElements(comment)
+  })
+
+  socket.addEventListener(`hotArticles:update`, (hotArticles) => {
+    updateHotArticles(hotArticles)
   })
 })();

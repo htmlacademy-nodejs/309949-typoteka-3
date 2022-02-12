@@ -8,6 +8,7 @@ const paramsValidator = require(`../middleware/params-validator`);
 const validatorMiddleware = require(`../middleware/validator-middleware`);
 const articleSchema = require(`../schemas/article-schema`);
 const commentSchema = require(`../schemas/comment-schema`);
+const {truncate} = require(`../../utils`);
 
 module.exports = (app, articleService, commentService, categoryService) => {
   const route = new Router();
@@ -68,8 +69,26 @@ module.exports = (app, articleService, commentService, categoryService) => {
     const {article} = res.locals;
     const comment = await commentService.create(req.body, article.id);
 
+    const updatedComment = {...comment.dataValues, text: truncate(comment.dataValues.text, 100, true)};
+
     const io = req.app.locals.socketio;
-    io.emit(`comment:create`, comment);
+    io.emit(`comment:create`, updatedComment);
+
+    const hotArticles = await articleService.findHot();
+    const mappedHotArticles = hotArticles.map((item) => {
+      return {
+        ...item.dataValues,
+        announce: truncate(item.dataValues.announce, 100, true),
+      };
+    });
+    const isCommentHot = mappedHotArticles.some((item) => {
+      return item.id === article.id
+        || Number(item.commentsCount) > Number(comment.dataValues.article.dataValues.commentsCount);
+    });
+
+    if (isCommentHot) {
+      io.emit(`hotArticles:update`, mappedHotArticles);
+    }
 
     return res.status(HttpCode.CREATED)
       .json(comment);
