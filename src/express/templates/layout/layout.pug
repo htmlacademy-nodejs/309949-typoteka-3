@@ -43,5 +43,13 @@ html(lang=`ru`)
       include header/header-main
       block content
       include ./footer
-      script(src='/js/vendor.js')
-      script(src='/js/main.js')
+
+    if main
+      include ../common/featured/latest-comment-template
+      include ../common/featured/hot-article-template
+      script(src='https://cdn.socket.io/4.0.1/socket.io.js')
+      script(src='/js/socket.js')
+
+    script(src='/js/vendor.js')
+    script(src='/js/main.js')
+

@@ -8,7 +8,15 @@ const sequelize = require(`../lib/sequelize`);
 const {API_PREFIX, DEFAULT_PORT, HttpCode} = require(`../constants`);
 const {getLogger} = require(`../lib/logger`);
 
+const http = require(`http`);
+const socket = require(`../lib/socket`);
+
 const app = express();
+const server = http.createServer(app);
+
+const io = socket(server);
+app.locals.socketio = io;
+
 const logger = getLogger({name: `api`});
 
 app.use(express.json());
@@ -51,7 +59,7 @@ module.exports = {
     logger.info(`Connection to database established`);
 
     try {
-      app.listen(port, (err) => {
+      server.listen(port, (err) => {
         if (err) {
           return logger.error(`An error occurred on server creation: ${err.message}`);
         }
